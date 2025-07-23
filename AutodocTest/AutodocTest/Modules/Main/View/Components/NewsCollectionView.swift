@@ -7,65 +7,29 @@
 
 import UIKit
 
+private enum Section {
+    case main
+}
+
 final class NewsCollectionView: UICollectionView {
 
-//    // MARK: – Data model
-//    private var items: [(image: UIImage?, title: String)] = []
-
-    // MARK: – Init
-
-//    init() {
-//        super.init(frame: .zero, collectionViewLayout: Self.makeLayout())
-//        commonInit()
-//    }
+    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, News>!
 
     var onCellSelected: ((News) -> Void)?
 
+    // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = Self.makeLayout()
         super.init(frame: frame, collectionViewLayout: layout)
         setupUI()
     }
 
-//    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-//        super.init(frame: frame, collectionViewLayout: layout)
-//        commonInit()
-//    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//        // если вы будете использовать сториборд/интерфейсбилдер,
-//        // убедитесь, что после инициализации layout тоже установлен.
-//        collectionViewLayout = Self.makeLayout()
-//        commonInit()
-//    }
-
-    private func setupUI() {
-        backgroundColor = .clear
-        translatesAutoresizingMaskIntoConstraints = false
-
-        registerCell(NewsCollectionViewCell.self)
-
-        dataSource = self
-        delegate = self
-
-    }
-
-    // MARK: – Public API
-    /// Передать данные и обновить коллекцию
-    func setItems(_ items: [(image: UIImage?, title: String)]) {
-//        self.items = items
-        reloadData()
-    }
 
     // MARK: – Layout
-
     private static func makeLayout() -> UICollectionViewLayout {
-        // Одна ячейка на всю ширину, высота — estimate
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .absolute(100)
@@ -89,21 +53,44 @@ final class NewsCollectionView: UICollectionView {
     }
 }
 
-// MARK: – UICollectionViewDataSource, UICollectionViewDelegate
-extension NewsCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        News.mockData.count
+private extension NewsCollectionView {
+    func setupUI() {
+        backgroundColor = .clear
+        translatesAutoresizingMaskIntoConstraints = false
+
+        registerCell(NewsCollectionViewCell.self)
+
+        delegate = self
+
+        setupDataSource()
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueCell(for: indexPath) as NewsCollectionViewCell
-        let news = News.mockData[indexPath.item]
-        cell.configure(with: news)
-        return cell
+    func setupDataSource() {
+        diffableDataSource = UICollectionViewDiffableDataSource<Section, News>(collectionView: self)
+        { collectionView, indexPath, news in
+            let cell = collectionView.dequeueCell(for: indexPath) as NewsCollectionViewCell
+            cell.configure(with: news)
+            return cell
+        }
+
+        setupSnapshot(data: News.mockData)
     }
 
+    func setupSnapshot(data: [News], animatingDifferences: Bool = true) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, News>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(data, toSection: .main)
+
+        snapshot.reloadItems(data)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+        }
+    }
+}
+
+// MARK: – UICollectionViewDelegate
+extension NewsCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let news = News.mockData[indexPath.item]
         onCellSelected?(news)

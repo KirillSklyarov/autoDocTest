@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct News {
+struct News: Hashable {
     let id: Int
     let title: String
     let description: String
@@ -16,6 +16,14 @@ struct News {
     let fullUrl: String
     let titleImageUrl: String
     let categoryType: String
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: News, rhs: News) -> Bool {
+        lhs.id == rhs.id
+    }
 
     static let mockData: [News] = [
         News(
