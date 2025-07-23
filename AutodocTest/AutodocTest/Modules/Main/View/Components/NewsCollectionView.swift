@@ -19,6 +19,8 @@ final class NewsCollectionView: UICollectionView {
 //        commonInit()
 //    }
 
+    var onCellSelected: ((News) -> Void)?
+
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = Self.makeLayout()
         super.init(frame: frame, collectionViewLayout: layout)
@@ -43,23 +45,17 @@ final class NewsCollectionView: UICollectionView {
 //    }
 
     private func setupUI() {
-
         backgroundColor = .clear
         translatesAutoresizingMaskIntoConstraints = false
-//        isScrollEnabled = false
 
         registerCell(NewsCollectionViewCell.self)
 
         dataSource = self
+        delegate = self
 
-//        alwaysBounceHorizontal = false
-
-        // Отступы вокруг секции
-//        contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
 
     // MARK: – Public API
-
     /// Передать данные и обновить коллекцию
     func setItems(_ items: [(image: UIImage?, title: String)]) {
 //        self.items = items
@@ -93,8 +89,8 @@ final class NewsCollectionView: UICollectionView {
     }
 }
 
-// MARK: – UICollectionViewDataSource
-extension NewsCollectionView: UICollectionViewDataSource {
+// MARK: – UICollectionViewDataSource, UICollectionViewDelegate
+extension NewsCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         News.mockData.count
@@ -106,5 +102,10 @@ extension NewsCollectionView: UICollectionViewDataSource {
         let news = News.mockData[indexPath.item]
         cell.configure(with: news)
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let news = News.mockData[indexPath.item]
+        onCellSelected?(news)
     }
 }
