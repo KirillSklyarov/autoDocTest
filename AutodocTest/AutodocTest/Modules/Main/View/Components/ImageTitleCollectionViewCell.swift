@@ -15,6 +15,8 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     private lazy var stackView = AppStackView([imageView, titleLabel], axis: .horizontal, spacing: 10)
 
+    private var imageLoader: ImageLoader?
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,8 +27,10 @@ final class NewsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with news: News) {
-        imageView.loadImage(from: news.titleImageUrl)
+    func configure(with news: News, imageLoader: ImageLoader?) {
+        guard let imageLoader else { return }
+        imageView.setImage(from: news.titleImageUrl, with: imageLoader)
+//        loadImage(from: news.titleImageUrl)
         titleLabel.text = news.title
     }
 

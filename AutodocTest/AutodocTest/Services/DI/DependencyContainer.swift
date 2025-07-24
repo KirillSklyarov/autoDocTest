@@ -14,6 +14,8 @@ final class DependencyContainer {
     let session: URLSession
     let networkClient: NetworkClient
     let networkService: NetworkService
+    let imageLoader: ImageLoader
+    let imageCache: ImageCache
 
     init() {
         decoder = JSONDecoder()
@@ -21,5 +23,7 @@ final class DependencyContainer {
         session = URLSession(configuration: .default)
         networkClient = NetworkClient(decoder: decoder, encoder: encoder, session: session)
         networkService = NetworkService(networkClient: networkClient)
+        imageCache = ImageCache()
+        imageLoader = ImageLoader(imageCache: imageCache, session: session)
     }
 }

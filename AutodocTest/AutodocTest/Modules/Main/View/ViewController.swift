@@ -21,11 +21,13 @@ final class MainViewController: UIViewController, MainDisplaying {
 
     private var cancellables: Set<AnyCancellable> = []
 
-    let viewModel: MainViewModelling
+    private let viewModel: MainViewModelling
+    private let imageLoader: ImageLoader
 
     // MARK: - Init
-    init(viewModel: MainViewModelling) {
+    init(viewModel: MainViewModelling, imageLoader: ImageLoader) {
         self.viewModel = viewModel
+        self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -47,11 +49,14 @@ final class MainViewController: UIViewController, MainDisplaying {
 
     func setupUI() {
         view.backgroundColor = .systemBackground
+        setupNewsCollectionView()
+        setupActivityIndicator()
+    }
 
+    func setupNewsCollectionView() {
         view.addSubviews(newsCollectionView)
         newsCollectionView.setConstraints(isSafeArea: true, allInsets: 10)
-
-        setupActivityIndicator()
+        newsCollectionView.imageLoader = imageLoader
     }
 
     func setupActivityIndicator() {

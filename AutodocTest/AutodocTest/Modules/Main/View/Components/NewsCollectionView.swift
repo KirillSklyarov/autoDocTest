@@ -15,6 +15,8 @@ final class NewsCollectionView: UICollectionView {
 
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, News>!
 
+    var imageLoader: ImageLoader?
+
     var onCellSelected: ((News) -> Void)?
 
     // MARK: - Init
@@ -70,9 +72,9 @@ private extension NewsCollectionView {
 
     func setupDataSource() {
         diffableDataSource = UICollectionViewDiffableDataSource<Section, News>(collectionView: self)
-        { collectionView, indexPath, news in
+        { [weak self] collectionView, indexPath, news in
             let cell = collectionView.dequeueCell(for: indexPath) as NewsCollectionViewCell
-            cell.configure(with: news)
+            cell.configure(with: news, imageLoader: self?.imageLoader)
             return cell
         }
 
@@ -95,7 +97,7 @@ private extension NewsCollectionView {
 // MARK: – UICollectionViewDelegate
 extension NewsCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let news = News.mockData[indexPath.item]
-        onCellSelected?(news)
+        guard let item = diffableDataSource.itemIdentifier(for: indexPath) else { return }
+        onCellSelected?(item)
     }
 }
