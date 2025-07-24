@@ -42,7 +42,6 @@ private extension MainViewModel {
     func fetchData() async {
         do {
             self.data = try await networkService.fetchDataFromServer()
-            
         } catch let error as NetworkError {
             print(error.userMessage)
         } catch {

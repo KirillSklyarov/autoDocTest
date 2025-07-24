@@ -34,7 +34,6 @@ final class NewsCollectionView: UICollectionView {
 }
 
 private extension NewsCollectionView {
-    // MARK: – Layout
     static func makeLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),

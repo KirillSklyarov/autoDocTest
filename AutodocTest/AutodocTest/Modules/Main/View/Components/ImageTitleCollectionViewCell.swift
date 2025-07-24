@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 final class NewsCollectionViewCell: UICollectionViewCell {
 
@@ -27,7 +26,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with news: News) {
-        imageView.sd_setImage(with: URL(string: news.titleImageUrl))
+        imageView.loadImage(from: news.titleImageUrl)
         titleLabel.text = news.title
     }
 

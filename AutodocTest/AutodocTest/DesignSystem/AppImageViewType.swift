@@ -38,7 +38,6 @@ private extension AppImageView {
     func configure(_ type: AppImageViewType) {
         switch type {
         case .newsImage:
-//            layer.cornerRadius = 10
             clipsToBounds = true
             contentMode = .scaleAspectFill
             translatesAutoresizingMaskIntoConstraints = false
