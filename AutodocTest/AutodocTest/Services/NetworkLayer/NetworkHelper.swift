@@ -50,10 +50,12 @@ enum Domain: String {
     case autodoc = "https://webapi.autodoc.ru"
 }
 
-enum EndPoint: String {
-    case news = "/api/news/1/15"
+enum EndPoint {
+    case news(page: Int)
 
     var url: URL? {
-        URL(string: Domain.autodoc.rawValue + rawValue)
+        switch self {
+        case .news(let page): URL(string: "\(Domain.autodoc.rawValue)/api/news/\(page)/15")
+        }
     }
 }

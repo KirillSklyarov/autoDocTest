@@ -11,7 +11,8 @@ import Combine
 
 protocol MainDisplaying: AnyObject {
     func setupInitialState()
-    func showLoading()
+    func showLoading(_ bool: Bool)
+    func setScrollEnable(_ enable: Bool)
 }
 
 final class MainViewController: UIViewController, MainDisplaying {
@@ -30,7 +31,7 @@ final class MainViewController: UIViewController, MainDisplaying {
         self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,6 +48,25 @@ final class MainViewController: UIViewController, MainDisplaying {
         dataBinding()
     }
 
+    func showLoading(_ bool: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            if bool {
+                self?.activityIndicator.startAnimating()
+            } else {
+                self?.activityIndicator.stopAnimating()
+            }
+        }
+    }
+
+    func setScrollEnable(_ enable: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.newsCollectionView.isScrollEnabled = enable
+        }
+    }
+}
+
+// MARK: - Setup UI
+private extension MainViewController {
     func setupUI() {
         view.backgroundColor = .systemBackground
         setupNewsCollectionView()
@@ -70,11 +90,19 @@ final class MainViewController: UIViewController, MainDisplaying {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+}
 
+// MARK: - Setup Actions & Data binding
+private extension MainViewController {
     func setupActions() {
         newsCollectionView.onCellSelected = { [weak self] news in
-            guard let self = self else { return }
+            guard let self else { return }
             showURL(url: news.fullUrl)
+        }
+
+        newsCollectionView.onLoadNextPage = { [weak self] in
+            guard let self else { return }
+            viewModel.loadNextPage()
         }
     }
 
@@ -87,10 +115,6 @@ final class MainViewController: UIViewController, MainDisplaying {
                 newsCollectionView.apply(news: news)
             })
             .store(in: &cancellables)
-    }
-
-    func showLoading() {
-        activityIndicator.startAnimating()
     }
 
     func showURL(url: String) {

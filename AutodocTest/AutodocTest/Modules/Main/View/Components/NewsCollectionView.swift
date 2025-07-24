@@ -18,6 +18,8 @@ final class NewsCollectionView: UICollectionView {
     var imageLoader: ImageLoader?
 
     var onCellSelected: ((News) -> Void)?
+    var onLoadNextPage: (() -> Void)?
+    var onImageLoaded: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -75,6 +77,13 @@ private extension NewsCollectionView {
         { [weak self] collectionView, indexPath, news in
             let cell = collectionView.dequeueCell(for: indexPath) as NewsCollectionViewCell
             cell.configure(with: news, imageLoader: self?.imageLoader)
+
+            cell.onImageLoaded = { [weak self] in
+                guard let self else { return }
+                onImageLoaded?()
+//                print(">>> image loaded")
+            }
+
             return cell
         }
 
@@ -99,5 +108,14 @@ extension NewsCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = diffableDataSource.itemIdentifier(for: indexPath) else { return }
         onCellSelected?(item)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let limit = scrollView.contentSize.height - scrollView.bounds.size.height * 1.3
+
+        if offsetY > limit {
+            onLoadNextPage?()
+        }
     }
 }

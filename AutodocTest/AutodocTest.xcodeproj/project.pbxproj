@@ -31,6 +31,8 @@
 		737544742E32382E00D302F2 /* AppActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544732E32382E00D302F2 /* AppActivityIndicator.swift */; };
 		737544762E323B3200D302F2 /* UIImageView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544752E323B3200D302F2 /* UIImageView+Ext.swift */; };
 		7375447C2E32427900D302F2 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7375447A2E32427900D302F2 /* ImageCache.swift */; };
+		737544822E327E3C00D302F2 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544802E327E3C00D302F2 /* ImageLoader.swift */; };
+		737544842E3294EF00D302F2 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544832E3294EF00D302F2 /* UIImage+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,16 +59,10 @@
 		737544732E32382E00D302F2 /* AppActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActivityIndicator.swift; sourceTree = "<group>"; };
 		737544752E323B3200D302F2 /* UIImageView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Ext.swift"; sourceTree = "<group>"; };
 		7375447A2E32427900D302F2 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		737544802E327E3C00D302F2 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		737544832E3294EF00D302F2 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		73B8154D2E311028004FF9A5 /* AutodocTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutodocTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		7375447D2E32436300D302F2 /* ImageLoader */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ImageLoader;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		73B8154A2E311028004FF9A5 /* Frameworks */ = {
@@ -93,6 +89,7 @@
 		7312479C2E3116050027BF43 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				737544832E3294EF00D302F2 /* UIImage+Ext.swift */,
 				737544752E323B3200D302F2 /* UIImageView+Ext.swift */,
 				731247BD2E311C3D0027BF43 /* AppStackView.swift */,
 				731247B52E31163C0027BF43 /* UIView+Ext.swift */,
@@ -200,7 +197,7 @@
 		7375445E2E32211A00D302F2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				7375447D2E32436300D302F2 /* ImageLoader */,
+				737544812E327E3C00D302F2 /* ImageLoader */,
 				7375447B2E32427900D302F2 /* ImageCache */,
 				7375445D2E32211A00D302F2 /* NetworkLayer */,
 				737544642E3221AB00D302F2 /* DI */,
@@ -222,6 +219,14 @@
 				7375447A2E32427900D302F2 /* ImageCache.swift */,
 			);
 			path = ImageCache;
+			sourceTree = "<group>";
+		};
+		737544812E327E3C00D302F2 /* ImageLoader */ = {
+			isa = PBXGroup;
+			children = (
+				737544802E327E3C00D302F2 /* ImageLoader.swift */,
+			);
+			path = ImageLoader;
 			sourceTree = "<group>";
 		};
 		73B815442E311028004FF9A5 = {
@@ -254,9 +259,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				7375447D2E32436300D302F2 /* ImageLoader */,
 			);
 			name = AutodocTest;
 			packageProductDependencies = (
@@ -330,11 +332,13 @@
 				737544662E3221BD00D302F2 /* DependencyContainer.swift in Sources */,
 				731247AF2E3116050027BF43 /* ViewController.swift in Sources */,
 				737544742E32382E00D302F2 /* AppActivityIndicator.swift in Sources */,
+				737544842E3294EF00D302F2 /* UIImage+Ext.swift in Sources */,
 				737544682E32256D00D302F2 /* MainViewModel.swift in Sources */,
 				7375447C2E32427900D302F2 /* ImageCache.swift in Sources */,
 				731247BE2E311C3D0027BF43 /* AppStackView.swift in Sources */,
 				731247BC2E3118D70027BF43 /* AppLabelType.swift in Sources */,
 				731247B42E31161B0027BF43 /* ImageTitleCollectionViewCell.swift in Sources */,
+				737544822E327E3C00D302F2 /* ImageLoader.swift in Sources */,
 				7375445F2E32211A00D302F2 /* JsonResponse.swift in Sources */,
 				737544602E32211A00D302F2 /* NetworkClient.swift in Sources */,
 				737544612E32211A00D302F2 /* NetworkHelper.swift in Sources */,

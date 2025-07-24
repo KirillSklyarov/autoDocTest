@@ -7,12 +7,16 @@
 
 import UIKit
 
+protocol ImageLoaderProtocol {
+    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void)
+    func loadImageToCache(from urlString: String) async throws
+}
 
-final class ImageLoader {
+
+final class ImageLoader: ImageLoaderProtocol {
 
     private let imageCache: ImageCache
     private let session: URLSession
-
 
     init(imageCache: ImageCache, session: URLSession) {
         self.imageCache = imageCache
@@ -20,21 +24,22 @@ final class ImageLoader {
     }
 
     func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-//        self.image = placeholder
-
         guard let url = URL(string: urlString) else { completion(nil);
             print("Invalid URL"); return }
 
+//        print(#function, imageCache.isImageCached(url))
         if imageCache.isImageCached(url) {
             let image = imageCache.getImageFromCache(url)
+            print("✅ Get image from cache")
             completion(image)
             return
         }
 
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+        session.dataTask(with: url) { [weak self] data, _, error in
             guard let self, let data, error == nil, let image = UIImage(data: data)
             else { return }
 
+            print("🔴 We are here")
             imageCache.saveImageToCache(image, url)
 
             DispatchQueue.main.async {
@@ -42,5 +47,17 @@ final class ImageLoader {
             }
         }.resume()
     }
-}
 
+    func loadImageToCache(from urlString: String) async throws {
+
+        guard let url = URL(string: urlString) else {            print("Invalid URL"); throw NetworkError.invalidURL }
+
+        if imageCache.isImageCached(url) { print("Already cached"); return }
+
+        let (data, _) = try await session.data(from: url)
+
+        guard let image = UIImage(data: data) else { print("Failed to create image from data"); return }
+
+        imageCache.saveImageToCache(image, url)
+    }
+}
