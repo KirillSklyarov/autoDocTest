@@ -36,7 +36,7 @@ struct NetworkClient: Sendable {
         }
 
         guard 200...299 ~= httpResponse.statusCode else {
-            throw NetworkError.httpError(httpResponse.statusCode)
+            throw NetworkError.httpError(statusCode: httpResponse.statusCode, data: data)
         }
 
         do {

@@ -8,6 +8,15 @@
 import Foundation
 
 struct JsonResponse: Codable {
+    let news: [NewsJsonResponse]
+    let totalCount: Int
+
+    func toNewsList() -> [News] {
+        news.map { $0.toNews() }
+    }
+}
+
+struct NewsJsonResponse: Codable {
     let id: Int
     let title: String
     let description: String
@@ -19,6 +28,5 @@ struct JsonResponse: Codable {
 
     func toNews() -> News {
         return News(id: id, title: title, description: description, publishedDate: publishedDate, url: url, fullUrl: fullUrl, titleImageUrl: titleImageUrl, categoryType: categoryType)
-
     }
 }

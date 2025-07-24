@@ -28,8 +28,14 @@ final class NewsCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func apply(news: [News]) {
+        setupSnapshot(data: news)
+    }
+}
+
+private extension NewsCollectionView {
     // MARK: – Layout
-    private static func makeLayout() -> UICollectionViewLayout {
+    static func makeLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .absolute(100)
@@ -51,9 +57,7 @@ final class NewsCollectionView: UICollectionView {
 
         return UICollectionViewCompositionalLayout(section: section)
     }
-}
 
-private extension NewsCollectionView {
     func setupUI() {
         backgroundColor = .clear
         translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +77,7 @@ private extension NewsCollectionView {
             return cell
         }
 
-        setupSnapshot(data: News.mockData)
+        setupSnapshot(data: [])
     }
 
     func setupSnapshot(data: [News], animatingDifferences: Bool = true) {
