@@ -28,20 +28,21 @@ final class MainViewModel: MainViewModelling {
     }
 
     func initialize() {
+        view?.setupInitialState()
         loadData()
     }
+}
 
+private extension MainViewModel {
     func loadData() {
-        Task {
-            await fetchData()
-            //                view?.reloadData(with: data)
-        }
+        view?.showLoading()
+        Task { await fetchData() }
     }
 
     func fetchData() async {
         do {
             self.data = try await networkService.fetchDataFromServer()
-            print(data)
+            
         } catch let error as NetworkError {
             print(error.userMessage)
         } catch {

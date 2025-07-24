@@ -28,6 +28,7 @@
 		737544622E32211A00D302F2 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7375445C2E32211A00D302F2 /* NetworkService.swift */; };
 		737544662E3221BD00D302F2 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544652E3221BD00D302F2 /* DependencyContainer.swift */; };
 		737544682E32256D00D302F2 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544672E32256D00D302F2 /* MainViewModel.swift */; };
+		737544742E32382E00D302F2 /* AppActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544732E32382E00D302F2 /* AppActivityIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		7375445C2E32211A00D302F2 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		737544652E3221BD00D302F2 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		737544672E32256D00D302F2 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		737544732E32382E00D302F2 /* AppActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActivityIndicator.swift; sourceTree = "<group>"; };
 		73B8154D2E311028004FF9A5 /* AutodocTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutodocTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -164,6 +166,7 @@
 		731247B82E3116A70027BF43 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				737544732E32382E00D302F2 /* AppActivityIndicator.swift */,
 				731247BB2E3118D70027BF43 /* AppLabelType.swift */,
 				731247B92E3116B30027BF43 /* AppImageViewType.swift */,
 			);
@@ -300,6 +303,7 @@
 				731247AE2E3116050027BF43 /* News.swift in Sources */,
 				737544662E3221BD00D302F2 /* DependencyContainer.swift in Sources */,
 				731247AF2E3116050027BF43 /* ViewController.swift in Sources */,
+				737544742E32382E00D302F2 /* AppActivityIndicator.swift in Sources */,
 				737544682E32256D00D302F2 /* MainViewModel.swift in Sources */,
 				731247BE2E311C3D0027BF43 /* AppStackView.swift in Sources */,
 				731247BC2E3118D70027BF43 /* AppLabelType.swift in Sources */,
