@@ -21,7 +21,7 @@ final class ImageCache {
 
     func saveImageToCache(_ image: UIImage?, _ url: URL) {
         guard let resizedImage = getResizedImage(image) else { return }
-        print("✅ saved to cache")
+//        print("✅ saved to cache")
         cache.setObject(resizedImage, forKey: url as NSURL)
     }
 

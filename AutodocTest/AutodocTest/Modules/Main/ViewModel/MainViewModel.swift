@@ -10,10 +10,10 @@ import Combine
 
 protocol MainViewModelling: AnyObject {
     var newsDataPublisher: Published<[News]?>.Publisher { get }
+    var isLoadingNextPagePublisher: Published<Bool>.Publisher { get }
 
     func initialize()
     func loadNextPage()
-    func isAllImagesLoaded()
 }
 
 final class MainViewModel: MainViewModelling {
@@ -21,8 +21,14 @@ final class MainViewModel: MainViewModelling {
     @Published private var data: [News]?
     var newsDataPublisher: Published<[News]?>.Publisher { $data }
 
+    @Published var isLoadingNextPage = false {
+        didSet {
+            print("isLoadingNextPage: \(isLoadingNextPage)")
+        }
+    }
+    var isLoadingNextPagePublisher: Published<Bool>.Publisher { $isLoadingNextPage }
+
     private var pageNumber = 1
-    private var isLoading = false
     private var loadedImagesCount = 0
     private var mainViewVisibleCellsCount = 7
 
@@ -44,40 +50,26 @@ final class MainViewModel: MainViewModelling {
     }
 
     func loadNextPage() {
-        guard isLoading == false else { return }
         view?.setScrollEnable(false)
+        guard isLoadingNextPage == false else { print("HERE"); return }
+        isLoadingNextPage = true
         pageNumber += 1
+//        loadData()
         Task {
             await fetchData()
             view?.setScrollEnable(true)
-        }
-    }
-
-    func isAllImagesLoaded() {
-        guard let data else { print("No data"); return }
-        isLoading = true
-        view?.showLoading(true)
-        loadedImagesCount += 1
-
-        if loadedImagesCount == data.count {
-            print("All images loaded")
-            isLoading = false
-            view?.showLoading(false)
-
-            view?.setScrollEnable(true)
+            isLoadingNextPage = false
         }
     }
 }
 
 private extension MainViewModel {
     func loadData() {
-        isLoading = true
+//        isLoadingNextPage = true
         view?.showLoading(true)
         Task {
             await fetchData()
-
-            //            isAllImagesLoaded()
-            isLoading = false
+//            isLoadingNextPage = false
         }
     }
 
@@ -97,10 +89,8 @@ private extension MainViewModel {
         let firstVisibleCells = Array(fetchedData.prefix(mainViewVisibleCellsCount))
         await preLoadImages(with: firstVisibleCells)
         if data == nil || data!.isEmpty {
-//                print(1)
             data = fetchedData
         } else {
-//                print(2)
             data?.append(contentsOf: fetchedData)
         }
     }
@@ -126,3 +116,18 @@ private extension MainViewModel {
     }
 }
 
+
+//    func isAllImagesLoaded() {
+//        guard let data else { print("No data"); return }
+//        isLoading = true
+//        view?.showLoading(true)
+//        loadedImagesCount += 1
+//
+//        if loadedImagesCount == data.count {
+//            print("All images loaded")
+//            isLoading = false
+//            view?.showLoading(false)
+//
+//            view?.setScrollEnable(true)
+//        }
+//    }

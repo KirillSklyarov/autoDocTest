@@ -17,6 +17,13 @@ final class NewsCollectionView: UICollectionView {
 
     var imageLoader: ImageLoader?
 
+    var isLoadingNextPage = false {
+        didSet {
+//            print("isLoadingNextPage \(isLoadingNextPage)")
+            reloadFooter()
+        }
+    }
+
     var onCellSelected: ((News) -> Void)?
     var onLoadNextPage: (() -> Void)?
     var onImageLoaded: (() -> Void)?
@@ -58,6 +65,12 @@ private extension NewsCollectionView {
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 8
 
+        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
+
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+
+        section.boundarySupplementaryItems = [footer]
+
         return UICollectionViewCompositionalLayout(section: section)
     }
 
@@ -66,6 +79,7 @@ private extension NewsCollectionView {
         translatesAutoresizingMaskIntoConstraints = false
 
         registerCell(NewsCollectionViewCell.self)
+        registerSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, viewClass: LoadingFooterView.self)
 
         delegate = self
 
@@ -87,6 +101,25 @@ private extension NewsCollectionView {
             return cell
         }
 
+        diffableDataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            guard let self else { return UICollectionReusableView() }
+            if kind == UICollectionView.elementKindSectionFooter {
+                let footer = collectionView.dequeueSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
+
+                if isLoadingNextPage {
+                    print("footer.startAnimating")
+                    footer.startAnimating()
+                } else {
+                    print("footer.stopAnimating")
+                    footer.stopAnimating()
+                }
+
+                return footer
+            } else {
+                return UICollectionReusableView()
+            }
+        }
+
         setupSnapshot(data: [])
     }
 
@@ -94,12 +127,17 @@ private extension NewsCollectionView {
         var snapshot = NSDiffableDataSourceSnapshot<Section, News>()
         snapshot.appendSections([.main])
         snapshot.appendItems(data, toSection: .main)
-
         snapshot.reloadItems(data)
 
         DispatchQueue.main.async { [weak self] in
             self?.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
         }
+    }
+
+    func reloadFooter() {
+        var snapshot = diffableDataSource.snapshot()
+        snapshot.reloadSections([.main])
+        diffableDataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
@@ -111,10 +149,12 @@ extension NewsCollectionView: UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let visibleHeight = scrollView.bounds.size.height
         let offsetY = scrollView.contentOffset.y
-        let limit = scrollView.contentSize.height - scrollView.bounds.size.height * 1.3
 
-        if offsetY > limit {
+        if offsetY + visibleHeight >= contentHeight {
+//            print("🔑 onLoadNextPage")
             onLoadNextPage?()
         }
     }

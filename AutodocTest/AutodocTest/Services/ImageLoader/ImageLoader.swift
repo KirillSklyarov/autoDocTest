@@ -30,7 +30,7 @@ final class ImageLoader: ImageLoaderProtocol {
 //        print(#function, imageCache.isImageCached(url))
         if imageCache.isImageCached(url) {
             let image = imageCache.getImageFromCache(url)
-            print("✅ Get image from cache")
+//            print("✅ Get image from cache")
             completion(image)
             return
         }
@@ -39,7 +39,7 @@ final class ImageLoader: ImageLoaderProtocol {
             guard let self, let data, error == nil, let image = UIImage(data: data)
             else { return }
 
-            print("🔴 We are here")
+            print("🔴 Downloading image and saving to cache")
             imageCache.saveImageToCache(image, url)
 
             DispatchQueue.main.async {
@@ -52,7 +52,8 @@ final class ImageLoader: ImageLoaderProtocol {
 
         guard let url = URL(string: urlString) else {            print("Invalid URL"); throw NetworkError.invalidURL }
 
-        if imageCache.isImageCached(url) { print("Already cached"); return }
+        if imageCache.isImageCached(url) { // print("Already cached");
+            return }
 
         let (data, _) = try await session.data(from: url)
 
