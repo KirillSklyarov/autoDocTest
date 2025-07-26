@@ -107,10 +107,10 @@ private extension NewsCollectionView {
                 let footer = collectionView.dequeueSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
 
                 if isLoadingNextPage {
-                    print("footer.startAnimating")
+//                    print("footer.startAnimating")
                     footer.startAnimating()
                 } else {
-                    print("footer.stopAnimating")
+//                    print("footer.stopAnimating")
                     footer.stopAnimating()
                 }
 

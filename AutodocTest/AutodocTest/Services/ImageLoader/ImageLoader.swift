@@ -52,8 +52,12 @@ final class ImageLoader: ImageLoaderProtocol {
 
         guard let url = URL(string: urlString) else {            print("Invalid URL"); throw NetworkError.invalidURL }
 
-        if imageCache.isImageCached(url) { // print("Already cached");
-            return }
+        if imageCache.isImageCached(url) {
+            print("Already cached or found on disk");
+            return
+        } else {
+            print("Downloading image and saving to cache")
+        }
 
         let (data, _) = try await session.data(from: url)
 

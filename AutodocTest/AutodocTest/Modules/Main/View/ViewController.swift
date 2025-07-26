@@ -110,7 +110,9 @@ private extension MainViewController {
         viewModel.newsDataPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] news in
-                guard let self, let news else { print(#function, "news is nil"); return }
+                guard let self, let news else { //print(#function, "news is nil");
+                    return
+                }
                 activityIndicator.stopAnimating()
                 newsCollectionView.apply(news: news)
             })
@@ -120,7 +122,7 @@ private extension MainViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] isLoading in
                 guard let self else { print(#function, "self is nil"); return }
-                print(#function, "isLoading: \(isLoading)")
+//                print(#function, "isLoading: \(isLoading)")
                 newsCollectionView.isLoadingNextPage = isLoading
 //                newsCollectionView.showLoadingFooter(isLoading)
             })
