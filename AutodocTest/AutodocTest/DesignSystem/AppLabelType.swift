@@ -30,6 +30,7 @@ final class AppLabel: UILabel {
 // MARK: - Setup UI
 private extension AppLabel {
     func configure(_ type: AppLabelType, numberOfLines: Int, title: String?) {
+        translatesAutoresizingMaskIntoConstraints = false
         switch type {
         case .title:
             font = .systemFont(ofSize: 18, weight: .bold)

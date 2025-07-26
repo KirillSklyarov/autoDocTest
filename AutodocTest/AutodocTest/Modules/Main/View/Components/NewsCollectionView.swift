@@ -152,8 +152,10 @@ extension NewsCollectionView: UICollectionViewDelegate {
         let visibleHeight = scrollView.bounds.size.height
         let offsetY = scrollView.contentOffset.y
 
+        guard contentHeight > visibleHeight else { print("Nothing to scroll"); return }
+
         if offsetY + visibleHeight >= contentHeight {
-//            print("🔑 onLoadNextPage")
+            print("🔑 onLoadNextPage")
             onLoadNextPage?()
         }
     }

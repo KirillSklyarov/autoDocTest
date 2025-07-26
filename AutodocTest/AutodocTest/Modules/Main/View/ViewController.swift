@@ -137,9 +137,7 @@ private extension MainViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] isLoading in
                 guard let self else { print(#function, "self is nil"); return }
-//                print(#function, "isLoading: \(isLoading)")
                 newsCollectionView.isLoadingNextPage = isLoading
-//                newsCollectionView.showLoadingFooter(isLoading)
             })
             .store(in: &cancellables)
     }

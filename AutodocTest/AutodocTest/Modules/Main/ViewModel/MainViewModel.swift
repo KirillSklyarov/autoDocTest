@@ -23,6 +23,8 @@ final class MainViewModel: MainViewModelling {
 
     @Published var isLoadingNextPage = false {
         didSet {
+//            print("🟠 isLoadingNextPage set to: \(isLoadingNextPage)")
+                    Thread.callStackSymbols.forEach { print($0) }
             print("isLoadingNextPage: \(isLoadingNextPage)")
         }
     }
