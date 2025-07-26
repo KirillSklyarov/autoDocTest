@@ -18,9 +18,12 @@ final class ImageCache {
         return url
     }()
 
+    private let oldFilesDaysThreshold = 7
+
     // MARK: - Init
     init() {
         createCacheDirectoryIfNeeded()
+        clearOldFiles()
     }
 
     // MARK: - Public methods
@@ -107,10 +110,10 @@ private extension ImageCache {
             print("🔴 Failed to convert image to JPEG data")
             return }
         do {
-//            print("Full file path: \(fileURL.path)")
+            //            print("Full file path: \(fileURL.path)")
             try data.write(to: fileURL)
             print("✅ saved to disk")
-//            print("filename: \(fileURL.lastPathComponent)")
+            //            print("filename: \(fileURL.lastPathComponent)")
         } catch {
             print("🔴 image NOT saved to disk: \(error.localizedDescription)")
         }
@@ -126,5 +129,22 @@ private extension ImageCache {
     func getPath(for url: URL) -> URL {
         let filename = String(url.lastPathComponent)
         return cacheDirectoryURL.appendingPathComponent(filename)
+    }
+
+    func clearOldFiles() {
+        let expirationDate = Date().addingTimeInterval(TimeInterval(-oldFilesDaysThreshold * 24 * 60 * 60))
+
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: cacheDirectoryURL, includingPropertiesForKeys: [.contentModificationDateKey])
+            for fileURL in fileURLs {
+                let attributes = try fileURL.resourceValues(forKeys: [.contentModificationDateKey])
+                if let modifiedDate = attributes.contentModificationDate, modifiedDate < expirationDate {
+                    try fileManager.removeItem(at: fileURL)
+                    print("🗑 Removed old cached file: \(fileURL.lastPathComponent)")
+                }
+            }
+        } catch {
+            print("🔴 Failed to clear old cached files: \(error.localizedDescription)")
+        }
     }
 }
