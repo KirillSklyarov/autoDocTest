@@ -10,10 +10,14 @@ import UIKit
 final class NewsCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var imageView = AppImageView(type: .newsImage)
     private lazy var titleLabel = AppLabel(type: .title)
+    private lazy var dateLabel = AppLabel(type: .date)
+    private lazy var imageView = AppImageView(type: .newsImage)
+    private lazy var categoryLabel = CategoryView()
 
-    private lazy var stackView = AppStackView([imageView, titleLabel], axis: .horizontal, spacing: 10)
+    private lazy var titleAndDateStackView = AppStackView([titleLabel, dateLabel], axis: .vertical, spacing: 5)
+
+    private lazy var stackView = AppStackView([titleAndDateStackView, imageView, categoryLabel], axis: .vertical, spacing: 10)
 
     private var imageLoader: ImageLoader?
 
@@ -35,16 +39,28 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 //            print(#function)
             self?.onImageLoaded?()
         }
-//        loadImage(from: news.titleImageUrl)
         titleLabel.text = news.title
+        dateLabel.text = news.publishedDate
+        categoryLabel.setText(news.categoryType)
     }
 
     private func setupUI() {
-        contentView.backgroundColor = .lightGray
-        layer.cornerRadius = 10
-        clipsToBounds = true
-
+        contentView.backgroundColor = .clear
         contentView.addSubviews(stackView)
-        stackView.setConstraints(allInsets: 10)
+
+        setupLayout()
+
+    }
+
+    private func setupLayout() {
+        stackView.setConstraints(insets: .init(top: 10, left: 0, bottom: 10, right: 0))
+
+        titleAndDateStackView.isLayoutMarginsRelativeArrangement = true
+        titleAndDateStackView.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 10)
+
+
+        NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1000/1600)
+        ])
     }
 }

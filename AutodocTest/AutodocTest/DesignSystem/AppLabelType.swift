@@ -10,6 +10,8 @@ import UIKit
 
 enum AppLabelType {
     case title
+    case date
+    case category
 }
 
 final class AppLabel: UILabel {
@@ -30,9 +32,19 @@ private extension AppLabel {
     func configure(_ type: AppLabelType, numberOfLines: Int, title: String?) {
         switch type {
         case .title:
-            font = .systemFont(ofSize: 16, weight: .bold)
-            textColor = .black
+            font = .systemFont(ofSize: 18, weight: .bold)
+            textColor = .white
             backgroundColor = .clear
+            text = title
+            self.numberOfLines = numberOfLines
+        case .date:
+            font = .systemFont(ofSize: 14, weight: .regular)
+            textColor = .gray
+            text = title
+            self.numberOfLines = numberOfLines
+        case .category:
+            font = .systemFont(ofSize: 16, weight: .semibold)
+            textColor = .gray
             text = title
             self.numberOfLines = numberOfLines
         }

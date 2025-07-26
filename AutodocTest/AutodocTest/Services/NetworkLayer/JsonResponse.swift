@@ -27,6 +27,14 @@ struct NewsJsonResponse: Codable {
     let categoryType: String
 
     func toNews() -> News {
-        return News(id: id, title: title, description: description, publishedDate: publishedDate, url: url, fullUrl: fullUrl, titleImageUrl: titleImageUrl, categoryType: categoryType)
+        return News(
+            id: id,
+            title: title,
+            description: description,
+            publishedDate: AppHelper.DateUtils.format(publishedDate),
+            url: url,
+            fullUrl: fullUrl,
+            titleImageUrl: titleImageUrl,
+            categoryType: categoryType)
     }
 }

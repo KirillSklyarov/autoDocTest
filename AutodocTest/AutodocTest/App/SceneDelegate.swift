@@ -18,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = MainViewModel(networkService: di.networkService, imageLoader: di.imageLoader)
         let vc = MainViewController(viewModel: viewModel, imageLoader: di.imageLoader)
         viewModel.view = vc
-        window?.rootViewController = vc
+        let navVC = UINavigationController(rootViewController: vc)
+        window?.rootViewController = navVC
         window?.makeKeyAndVisible()
     }
 

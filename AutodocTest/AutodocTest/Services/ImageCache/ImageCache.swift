@@ -81,8 +81,9 @@ final class ImageCache {
 private extension ImageCache {
     func getResizedImage(_ image: UIImage?) -> UIImage? {
         guard let image else { print("image is nil"); return nil }
-        let scale = UIScreen.main.scale
-        let size = CGSize(width: 80 * scale, height: 80 * scale)
+        let screenWidth = UIScreen.main.bounds.width
+        let aspectRatio: CGFloat = 1000 / 1600
+        let size = CGSize(width: screenWidth, height: screenWidth * aspectRatio)
         return image.resizedMaintainingAspectRatio(to: size)
     }
 

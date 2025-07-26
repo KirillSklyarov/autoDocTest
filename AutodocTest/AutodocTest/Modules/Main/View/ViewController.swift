@@ -68,14 +68,16 @@ final class MainViewController: UIViewController, MainDisplaying {
 // MARK: - Setup UI
 private extension MainViewController {
     func setupUI() {
-        view.backgroundColor = .systemBackground
+        setupNavigation()
+
+        view.backgroundColor = .black
         setupNewsCollectionView()
         setupActivityIndicator()
     }
 
     func setupNewsCollectionView() {
         view.addSubviews(newsCollectionView)
-        newsCollectionView.setConstraints(isSafeArea: true, allInsets: 10)
+        newsCollectionView.setConstraints(isSafeArea: true, allInsets: 0)
         newsCollectionView.imageLoader = imageLoader
     }
 
@@ -89,6 +91,19 @@ private extension MainViewController {
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+
+    private func setupNavigation() {
+        title = "Новости"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .automatic
+
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .black
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }
 

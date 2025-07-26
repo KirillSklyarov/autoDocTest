@@ -34,6 +34,8 @@
 		737544822E327E3C00D302F2 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544802E327E3C00D302F2 /* ImageLoader.swift */; };
 		737544842E3294EF00D302F2 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544832E3294EF00D302F2 /* UIImage+Ext.swift */; };
 		737544862E32CD9900D302F2 /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544852E32CD9900D302F2 /* LoadingFooterView.swift */; };
+		737544882E355DF700D302F2 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544872E355DF700D302F2 /* AppHelper.swift */; };
+		7375448A2E35656A00D302F2 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544892E35656A00D302F2 /* CategoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +65,8 @@
 		737544802E327E3C00D302F2 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		737544832E3294EF00D302F2 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		737544852E32CD9900D302F2 /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
+		737544872E355DF700D302F2 /* AppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
+		737544892E35656A00D302F2 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		73B8154D2E311028004FF9A5 /* AutodocTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutodocTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -91,6 +95,7 @@
 		7312479C2E3116050027BF43 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				737544872E355DF700D302F2 /* AppHelper.swift */,
 				737544832E3294EF00D302F2 /* UIImage+Ext.swift */,
 				737544752E323B3200D302F2 /* UIImageView+Ext.swift */,
 				731247BD2E311C3D0027BF43 /* AppStackView.swift */,
@@ -114,6 +119,7 @@
 				737544852E32CD9900D302F2 /* LoadingFooterView.swift */,
 				731247BF2E311D910027BF43 /* NewsCollectionView.swift */,
 				731247B32E31161B0027BF43 /* ImageTitleCollectionViewCell.swift */,
+				737544892E35656A00D302F2 /* CategoryView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -327,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				731247AB2E3116050027BF43 /* AppDelegate.swift in Sources */,
+				737544882E355DF700D302F2 /* AppHelper.swift in Sources */,
 				731247AC2E3116050027BF43 /* SceneDelegate.swift in Sources */,
 				731247BA2E3116B30027BF43 /* AppImageViewType.swift in Sources */,
 				731247B62E31163C0027BF43 /* UIView+Ext.swift in Sources */,
@@ -339,6 +346,7 @@
 				737544682E32256D00D302F2 /* MainViewModel.swift in Sources */,
 				7375447C2E32427900D302F2 /* ImageCache.swift in Sources */,
 				731247BE2E311C3D0027BF43 /* AppStackView.swift in Sources */,
+				7375448A2E35656A00D302F2 /* CategoryView.swift in Sources */,
 				731247BC2E3118D70027BF43 /* AppLabelType.swift in Sources */,
 				731247B42E31161B0027BF43 /* ImageTitleCollectionViewCell.swift in Sources */,
 				737544822E327E3C00D302F2 /* ImageLoader.swift in Sources */,

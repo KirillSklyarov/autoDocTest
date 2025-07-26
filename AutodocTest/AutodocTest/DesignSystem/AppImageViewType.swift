@@ -27,10 +27,10 @@ final class AppImageView: UIImageView {
         self.image = image
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.layer.cornerRadius = frame.height / 2
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        self.layer.cornerRadius = frame.height / 2
+//    }
 }
 
 // MARK: - Setup UI
@@ -38,12 +38,12 @@ private extension AppImageView {
     func configure(_ type: AppImageViewType) {
         switch type {
         case .newsImage:
-            clipsToBounds = true
-            contentMode = .scaleAspectFill
+//            clipsToBounds = true
+//            contentMode = .scaleAspectFill
             translatesAutoresizingMaskIntoConstraints = false
-            heightAnchor.constraint(equalToConstant: 80).isActive = true
-            widthAnchor.constraint(equalToConstant: 80).isActive = true
-            backgroundColor = .black
+//            heightAnchor.constraint(equalToConstant: 80).isActive = true
+//            widthAnchor.constraint(equalToConstant: 80).isActive = true
+//            backgroundColor = .black
         }
     }
 }

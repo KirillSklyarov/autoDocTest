@@ -19,7 +19,6 @@ final class NewsCollectionView: UICollectionView {
 
     var isLoadingNextPage = false {
         didSet {
-//            print("isLoadingNextPage \(isLoadingNextPage)")
             reloadFooter()
         }
     }
@@ -48,13 +47,13 @@ private extension NewsCollectionView {
     static func makeLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(100)
+            heightDimension: .estimated(330)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(100)
+            heightDimension: .estimated(330)
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
@@ -76,7 +75,7 @@ private extension NewsCollectionView {
 
     func setupUI() {
         backgroundColor = .clear
-        translatesAutoresizingMaskIntoConstraints = false
+        indicatorStyle = .white
 
         registerCell(NewsCollectionViewCell.self)
         registerSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, viewClass: LoadingFooterView.self)

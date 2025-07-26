@@ -30,7 +30,7 @@ final class MainViewModel: MainViewModelling {
 
     private var pageNumber = 1
     private var loadedImagesCount = 0
-    private var mainViewVisibleCellsCount = 7
+    private var mainViewVisibleCellsCount = 3
 
     weak var view: MainDisplaying?
 
