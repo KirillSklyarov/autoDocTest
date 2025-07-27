@@ -50,7 +50,7 @@ final class ImageLoader: ImageLoaderProtocol {
 
     func loadImageToCache(from urlString: String) async throws {
 
-        guard let url = URL(string: urlString) else {            print("Invalid URL"); throw NetworkError.invalidURL }
+        guard let url = URL(string: urlString) else { print("Invalid URL"); throw NetworkError.invalidURL }
 
         if imageCache.isImageCached(url) {
             print("Already cached or found on disk");

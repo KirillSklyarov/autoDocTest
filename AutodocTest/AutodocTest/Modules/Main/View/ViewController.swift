@@ -119,6 +119,30 @@ private extension MainViewController {
             guard let self else { return }
             viewModel.loadNextPage()
         }
+
+        newsCollectionView.onShareButtonTapped = { [weak self] news in
+            self?.showShareAlert(with: news)
+        }
+    }
+
+    func showShareAlert(with data: News) {
+//        print(#function)
+        let vc = AppActionSheet()
+        vc.configureUI(with: data)
+//        print(vc)
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
+//        router.present(vc, isParent: true, animated: false, modalPresentation: .overFullScreen)
+
+        vc.onDismissButtonTapped = { [weak self] in
+            guard let self else { return }
+            guard let parent = navigationController?.visibleViewController else { print("Error: No parent"); return }
+            parent.dismiss(animated: true)
+
+//            self?.d
+//            router.dismiss(isParent: true)
+        }
     }
 
     func dataBinding() {

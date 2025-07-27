@@ -9,6 +9,7 @@ import UIKit
 
 enum AppImageViewType {
     case newsImage
+    case dotsImage
 }
 
 final class AppImageView: UIImageView {
@@ -44,6 +45,9 @@ private extension AppImageView {
 //            heightAnchor.constraint(equalToConstant: 80).isActive = true
 //            widthAnchor.constraint(equalToConstant: 80).isActive = true
 //            backgroundColor = .black
+        case .dotsImage:
+            image = UIImage(systemName: "ellipsis")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+
         }
     }
 }

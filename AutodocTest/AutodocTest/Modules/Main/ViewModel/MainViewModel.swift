@@ -14,25 +14,20 @@ protocol MainViewModelling: AnyObject {
 
     func initialize()
     func loadNextPage()
+//    func showShareAlert(with data: News)
 }
 
 final class MainViewModel: MainViewModelling {
 
+    // MARK: - Properties
     @Published private var data: [News]?
     var newsDataPublisher: Published<[News]?>.Publisher { $data }
 
-    @Published var isLoadingNextPage = false {
-        didSet {
-            print("isLoadingNextPage: \(isLoadingNextPage)")
-        }
-    }
+    @Published var isLoadingNextPage = false
     var isLoadingNextPagePublisher: Published<Bool>.Publisher { $isLoadingNextPage }
 
     private var pageNumber = 1
-    private let newsPerPage = 4
-    private var loadedImagesCount = 0
-    private var mainViewVisibleCellsCount = 3
-    private var fetchedData: [News] = []
+    private let newsPerPage = 5
 
     weak var view: MainDisplaying?
 
@@ -41,6 +36,7 @@ final class MainViewModel: MainViewModelling {
 
     var onAllImagesLoaded: (() -> Void)?
 
+    // MARK: - Init
     init(networkService: NetworkServiceProtocol, imageLoader: ImageLoaderProtocol) {
         self.networkService = networkService
         self.imageLoader = imageLoader
@@ -62,6 +58,7 @@ final class MainViewModel: MainViewModelling {
     }
 }
 
+// MARK: - Supporting methods
 private extension MainViewModel {
     func loadData() {
         view?.showLoading(true)
@@ -81,7 +78,7 @@ private extension MainViewModel {
     }
 
     func loadFirstVisiblePhotosToCache() async throws {
-        fetchedData = try await networkService.fetchDataFromServer(pageNumber: pageNumber, newsPerPage: newsPerPage)
+        let fetchedData = try await networkService.fetchDataFromServer(pageNumber: pageNumber, newsPerPage: newsPerPage)
         await loadImagesToCache(with: fetchedData)
         if data == nil || data!.isEmpty {
             data = fetchedData

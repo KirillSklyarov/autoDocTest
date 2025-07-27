@@ -26,6 +26,7 @@ final class NewsCollectionView: UICollectionView {
     var onCellSelected: ((News) -> Void)?
     var onLoadNextPage: (() -> Void)?
     var onImageLoaded: (() -> Void)?
+    var onShareButtonTapped: ((News) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -96,6 +97,10 @@ private extension NewsCollectionView {
                 onImageLoaded?()
             }
 
+            cell.onShareButtonTapped = { [weak self] in
+                self?.onShareButtonTapped?(news)
+            }
+
             return cell
         }
 
@@ -151,7 +156,7 @@ extension NewsCollectionView: UICollectionViewDelegate {
 
         guard contentHeight > visibleHeight else { return }
 
-        if offsetY + visibleHeight >= contentHeight * 0.6 {
+        if offsetY + visibleHeight >= contentHeight * 0.7 {
             onLoadNextPage?()
         }
 

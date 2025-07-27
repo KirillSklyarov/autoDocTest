@@ -34,6 +34,14 @@
 		737544862E32CD9900D302F2 /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544852E32CD9900D302F2 /* LoadingFooterView.swift */; };
 		737544882E355DF700D302F2 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544872E355DF700D302F2 /* AppHelper.swift */; };
 		7375448A2E35656A00D302F2 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544892E35656A00D302F2 /* CategoryView.swift */; };
+		73E2F9C12E366BFB00B184FE /* AppButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C02E366BFB00B184FE /* AppButtonType.swift */; };
+		73E2F9C32E36712400B184FE /* ShareButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C22E36712400B184FE /* ShareButtonView.swift */; };
+		73E2F9C52E3673C600B184FE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C42E3673C600B184FE /* AppConstants.swift */; };
+		73E2F9CB2E367E5100B184FE /* AppActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C92E367E5100B184FE /* AppActionSheet.swift */; };
+		73E2F9CD2E367E5200B184FE /* AppActionSheetButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9CC2E367E5200B184FE /* AppActionSheetButtonType.swift */; };
+		73E2F9CF2E367E6C00B184FE /* AppBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9CE2E367E6C00B184FE /* AppBlurView.swift */; };
+		73E2F9D12E368D4D00B184FE /* CopyLinkButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9D02E368D4D00B184FE /* CopyLinkButtonView.swift */; };
+		73E2F9D32E36997E00B184FE /* ActionSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9D22E36997E00B184FE /* ActionSheetContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +74,14 @@
 		737544872E355DF700D302F2 /* AppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
 		737544892E35656A00D302F2 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		73B8154D2E311028004FF9A5 /* AutodocTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutodocTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		73E2F9C02E366BFB00B184FE /* AppButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButtonType.swift; sourceTree = "<group>"; };
+		73E2F9C22E36712400B184FE /* ShareButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButtonView.swift; sourceTree = "<group>"; };
+		73E2F9C42E3673C600B184FE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		73E2F9C92E367E5100B184FE /* AppActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionSheet.swift; sourceTree = "<group>"; };
+		73E2F9CC2E367E5200B184FE /* AppActionSheetButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionSheetButtonType.swift; sourceTree = "<group>"; };
+		73E2F9CE2E367E6C00B184FE /* AppBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBlurView.swift; sourceTree = "<group>"; };
+		73E2F9D02E368D4D00B184FE /* CopyLinkButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkButtonView.swift; sourceTree = "<group>"; };
+		73E2F9D22E36997E00B184FE /* ActionSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +128,8 @@
 		7312479F2E3116050027BF43 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				73E2F9CA2E367E5100B184FE /* AppActionSheet */,
+				73E2F9C22E36712400B184FE /* ShareButtonView.swift */,
 				737544852E32CD9900D302F2 /* LoadingFooterView.swift */,
 				731247BF2E311D910027BF43 /* NewsCollectionView.swift */,
 				731247B32E31161B0027BF43 /* ImageTitleCollectionViewCell.swift */,
@@ -161,6 +179,7 @@
 				731247A52E3116050027BF43 /* Assets.xcassets */,
 				731247A62E3116050027BF43 /* Info.plist */,
 				731247A82E3116050027BF43 /* LaunchScreen.storyboard */,
+				73E2F9C42E3673C600B184FE /* AppConstants.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -181,6 +200,7 @@
 		731247B82E3116A70027BF43 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				73E2F9C02E366BFB00B184FE /* AppButtonType.swift */,
 				737544732E32382E00D302F2 /* AppActivityIndicator.swift */,
 				731247BB2E3118D70027BF43 /* AppLabelType.swift */,
 				731247B92E3116B30027BF43 /* AppImageViewType.swift */,
@@ -248,6 +268,18 @@
 				73B8154D2E311028004FF9A5 /* AutodocTest.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		73E2F9CA2E367E5100B184FE /* AppActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				73E2F9CE2E367E6C00B184FE /* AppBlurView.swift */,
+				73E2F9CC2E367E5200B184FE /* AppActionSheetButtonType.swift */,
+				73E2F9C92E367E5100B184FE /* AppActionSheet.swift */,
+				73E2F9D02E368D4D00B184FE /* CopyLinkButtonView.swift */,
+				73E2F9D22E36997E00B184FE /* ActionSheetContentView.swift */,
+			);
+			path = AppActionSheet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,6 +361,7 @@
 				737544882E355DF700D302F2 /* AppHelper.swift in Sources */,
 				731247AC2E3116050027BF43 /* SceneDelegate.swift in Sources */,
 				731247BA2E3116B30027BF43 /* AppImageViewType.swift in Sources */,
+				73E2F9D32E36997E00B184FE /* ActionSheetContentView.swift in Sources */,
 				731247B62E31163C0027BF43 /* UIView+Ext.swift in Sources */,
 				731247AD2E3116050027BF43 /* UICollectionView+Ext.swift in Sources */,
 				731247AE2E3116050027BF43 /* News.swift in Sources */,
@@ -336,18 +369,25 @@
 				731247AF2E3116050027BF43 /* ViewController.swift in Sources */,
 				737544742E32382E00D302F2 /* AppActivityIndicator.swift in Sources */,
 				737544842E3294EF00D302F2 /* UIImage+Ext.swift in Sources */,
+				73E2F9CD2E367E5200B184FE /* AppActionSheetButtonType.swift in Sources */,
+				73E2F9C52E3673C600B184FE /* AppConstants.swift in Sources */,
+				73E2F9CF2E367E6C00B184FE /* AppBlurView.swift in Sources */,
 				737544682E32256D00D302F2 /* MainViewModel.swift in Sources */,
 				7375447C2E32427900D302F2 /* ImageCache.swift in Sources */,
 				731247BE2E311C3D0027BF43 /* AppStackView.swift in Sources */,
 				7375448A2E35656A00D302F2 /* CategoryView.swift in Sources */,
 				731247BC2E3118D70027BF43 /* AppLabelType.swift in Sources */,
+				73E2F9D12E368D4D00B184FE /* CopyLinkButtonView.swift in Sources */,
 				731247B42E31161B0027BF43 /* ImageTitleCollectionViewCell.swift in Sources */,
 				737544822E327E3C00D302F2 /* ImageLoader.swift in Sources */,
 				7375445F2E32211A00D302F2 /* JsonResponse.swift in Sources */,
+				73E2F9CB2E367E5100B184FE /* AppActionSheet.swift in Sources */,
 				737544602E32211A00D302F2 /* NetworkClient.swift in Sources */,
+				73E2F9C32E36712400B184FE /* ShareButtonView.swift in Sources */,
 				737544862E32CD9900D302F2 /* LoadingFooterView.swift in Sources */,
 				737544612E32211A00D302F2 /* NetworkHelper.swift in Sources */,
 				737544622E32211A00D302F2 /* NetworkService.swift in Sources */,
+				73E2F9C12E366BFB00B184FE /* AppButtonType.swift in Sources */,
 				737544762E323B3200D302F2 /* UIImageView+Ext.swift in Sources */,
 				731247C02E311D910027BF43 /* NewsCollectionView.swift in Sources */,
 			);
