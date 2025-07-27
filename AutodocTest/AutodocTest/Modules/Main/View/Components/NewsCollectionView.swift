@@ -94,7 +94,6 @@ private extension NewsCollectionView {
             cell.onImageLoaded = { [weak self] in
                 guard let self else { return }
                 onImageLoaded?()
-//                print(">>> image loaded")
             }
 
             return cell
@@ -106,10 +105,8 @@ private extension NewsCollectionView {
                 let footer = collectionView.dequeueSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
 
                 if isLoadingNextPage {
-//                    print("footer.startAnimating")
                     footer.startAnimating()
                 } else {
-//                    print("footer.stopAnimating")
                     footer.stopAnimating()
                 }
 
@@ -122,7 +119,7 @@ private extension NewsCollectionView {
         setupSnapshot(data: [])
     }
 
-    func setupSnapshot(data: [News], animatingDifferences: Bool = true) {
+    func setupSnapshot(data: [News], animatingDifferences: Bool = false) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, News>()
         snapshot.appendSections([.main])
         snapshot.appendItems(data, toSection: .main)
@@ -152,10 +149,13 @@ extension NewsCollectionView: UICollectionViewDelegate {
         let visibleHeight = scrollView.bounds.size.height
         let offsetY = scrollView.contentOffset.y
 
-        guard contentHeight > visibleHeight else { print("Nothing to scroll"); return }
+        guard contentHeight > visibleHeight else { return }
+
+        if offsetY + visibleHeight >= contentHeight * 0.6 {
+            onLoadNextPage?()
+        }
 
         if offsetY + visibleHeight >= contentHeight {
-            print("🔑 onLoadNextPage")
             onLoadNextPage?()
         }
     }

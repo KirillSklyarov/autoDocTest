@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkServiceProtocol {
-    func fetchDataFromServer(pageNumber: Int) async throws -> [News]
+    func fetchDataFromServer(pageNumber: Int, newsPerPage: Int) async throws -> [News]
 }
 
 struct NetworkService: NetworkServiceProtocol {
@@ -22,8 +22,8 @@ struct NetworkService: NetworkServiceProtocol {
     }
 
     // MARK: - Fetch methods
-    func fetchDataFromServer(pageNumber: Int) async throws -> [News] {
-        let response = try await networkClient.fetchData(.news(page: pageNumber), type: JsonResponse.self)
+    func fetchDataFromServer(pageNumber: Int, newsPerPage: Int) async throws -> [News] {
+        let response = try await networkClient.fetchData(.news(page: pageNumber, newsPerPage: newsPerPage), type: JsonResponse.self)
         let news = responseMapping(response)
         return news
     }

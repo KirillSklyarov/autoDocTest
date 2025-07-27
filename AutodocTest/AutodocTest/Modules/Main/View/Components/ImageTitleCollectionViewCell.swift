@@ -36,7 +36,6 @@ final class NewsCollectionViewCell: UICollectionViewCell {
     func configure(with news: News, imageLoader: ImageLoader?) {
         guard let imageLoader else { return }
         imageView.setImage(from: news.titleImageUrl, with: imageLoader) { [weak self] in
-//            print(#function)
             self?.onImageLoaded?()
         }
         titleLabel.text = news.title

@@ -51,11 +51,11 @@ enum Domain: String {
 }
 
 enum EndPoint {
-    case news(page: Int)
+    case news(page: Int, newsPerPage: Int)
 
     var url: URL? {
         switch self {
-        case .news(let page): URL(string: "\(Domain.autodoc.rawValue)/api/news/\(page)/15")
+        case .news(let page, let newsPerPage): URL(string: "\(Domain.autodoc.rawValue)/api/news/\(page)/\(newsPerPage)")
         }
     }
 }

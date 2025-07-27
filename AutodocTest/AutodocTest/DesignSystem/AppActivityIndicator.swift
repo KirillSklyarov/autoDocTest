@@ -12,7 +12,7 @@ final class AppActivityIndicator: UIActivityIndicatorView {
 
     override init(style: UIActivityIndicatorView.Style = .large) {
         super.init(style: style)
-        color = .systemGreen
+        color = .systemRed
     }
 
     required init(coder: NSCoder) {

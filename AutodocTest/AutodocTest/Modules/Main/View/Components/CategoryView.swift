@@ -9,8 +9,6 @@ import UIKit
 
 final class CategoryView: UIView {
 
-    private let viewHeight: CGFloat = 40
-
     private lazy var radiusView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -48,7 +46,6 @@ private extension CategoryView {
 
         NSLayoutConstraint.activate([
             radiusView.trailingAnchor.constraint(equalTo: categoryLabel.trailingAnchor, constant: 10),
-            heightAnchor.constraint(equalToConstant: viewHeight)
         ])
     }
 }

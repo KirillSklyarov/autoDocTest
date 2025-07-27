@@ -128,6 +128,7 @@ private extension MainViewController {
                 guard let self, let news else { //print(#function, "news is nil");
                     return
                 }
+                print("🔑 Count: \(news.count)")
                 activityIndicator.stopAnimating()
                 newsCollectionView.apply(news: news)
             })
