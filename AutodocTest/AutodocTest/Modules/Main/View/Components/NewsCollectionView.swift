@@ -15,7 +15,7 @@ final class NewsCollectionView: UICollectionView {
 
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, News>!
 
-    var imageLoader: ImageLoader?
+    var imageLoader: ImageLoaderProtocol?
 
     var isLoadingNextPage = false {
         didSet {

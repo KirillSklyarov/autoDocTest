@@ -23,10 +23,10 @@ final class MainViewController: UIViewController, MainDisplaying {
     private var cancellables: Set<AnyCancellable> = []
 
     private let viewModel: MainViewModelling
-    private let imageLoader: ImageLoader
+    private let imageLoader: ImageLoaderProtocol
 
     // MARK: - Init
-    init(viewModel: MainViewModelling, imageLoader: ImageLoader) {
+    init(viewModel: MainViewModelling, imageLoader: ImageLoaderProtocol) {
         self.viewModel = viewModel
         self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)

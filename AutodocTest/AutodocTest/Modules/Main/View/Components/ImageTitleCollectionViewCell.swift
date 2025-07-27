@@ -22,7 +22,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     private lazy var stackView = AppStackView([textAndShareStackView, imageView, categoryLabel], axis: .vertical, spacing: 10, distribution: .equalSpacing)
 
-    private var imageLoader: ImageLoader?
+    private var imageLoader: ImageLoaderProtocol?
 
     var onImageLoaded: (() -> Void)?
     var onShareButtonTapped: (() -> Void)?
@@ -38,7 +38,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with news: News, imageLoader: ImageLoader?) {
+    func configure(with news: News, imageLoader: ImageLoaderProtocol?) {
         guard let imageLoader else { return }
         imageView.setImage(from: news.titleImageUrl, with: imageLoader) { [weak self] in
             self?.onImageLoaded?()

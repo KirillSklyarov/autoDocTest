@@ -55,7 +55,6 @@ private extension AppActionSheetDismissView {
     }
 
     @objc func buttonTapped() {
-        print(#function)
         onButtonTapped?()
     }
 }

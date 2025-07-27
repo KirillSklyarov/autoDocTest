@@ -15,10 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        let viewModel = MainViewModel(networkService: di.networkService, imageLoader: di.imageLoader)
-        let vc = MainViewController(viewModel: viewModel, imageLoader: di.imageLoader)
-        viewModel.view = vc
-        let navVC = UINavigationController(rootViewController: vc)
+        startApp()
+    }
+
+    private func startApp() {
+        let navVC = di.moduleFactory.makeModule(for: .main)
         window?.rootViewController = navVC
         window?.makeKeyAndVisible()
     }
