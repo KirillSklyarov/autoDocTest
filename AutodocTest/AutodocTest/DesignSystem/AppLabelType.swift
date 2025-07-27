@@ -13,6 +13,7 @@ enum AppLabelType {
     case date
     case category
     case copyLink
+    case toastTitle
 }
 
 final class AppLabel: UILabel {
@@ -50,6 +51,11 @@ private extension AppLabel {
             font = .systemFont(ofSize: 16, weight: .semibold)
             textColor = .white
             text = "Скопировать ссылку"
+        case .toastTitle:
+            font = .systemFont(ofSize: 14, weight: .semibold)
+            textColor = .white
+            backgroundColor = .clear
+            text = title
         }
         self.numberOfLines = numberOfLines
 

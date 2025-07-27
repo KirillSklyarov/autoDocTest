@@ -62,10 +62,22 @@ private extension AppActionSheet {
             onDismissButtonTapped?()
         }
 
-//        titleLabel.onButtonTapped = { [weak self] in
-//            guard let self else { return }
-//            print("Test")
-//        }
+        contentView.onCopyLinkTapped = { [weak self] in
+            guard let self else { return }
+            showAppToast(type: .linkCopied)
+        }
+    }
+
+    func showAppToast(type: ToastType, duration: TimeInterval = 2.0) {
+        let toast = ToastView(type: type)
+        view.addSubviews(toast)
+
+        NSLayoutConstraint.activate([
+            toast.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            toast.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
+        toast.showToast(duration: duration)
     }
 }
 

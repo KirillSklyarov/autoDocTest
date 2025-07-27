@@ -10,6 +10,7 @@ import UIKit
 enum AppImageViewType {
     case newsImage
     case dotsImage
+    case checkmark
 }
 
 final class AppImageView: UIImageView {
@@ -27,11 +28,6 @@ final class AppImageView: UIImageView {
     func setImage(_ image: UIImage?) {
         self.image = image
     }
-
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        self.layer.cornerRadius = frame.height / 2
-//    }
 }
 
 // MARK: - Setup UI
@@ -39,15 +35,12 @@ private extension AppImageView {
     func configure(_ type: AppImageViewType) {
         switch type {
         case .newsImage:
-//            clipsToBounds = true
-//            contentMode = .scaleAspectFill
             translatesAutoresizingMaskIntoConstraints = false
-//            heightAnchor.constraint(equalToConstant: 80).isActive = true
-//            widthAnchor.constraint(equalToConstant: 80).isActive = true
-//            backgroundColor = .black
         case .dotsImage:
             image = UIImage(systemName: "ellipsis")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-
+        case .checkmark:
+            let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
+            image = UIImage(systemName: "checkmark", withConfiguration: config)?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal)
         }
     }
 }

@@ -14,7 +14,6 @@ protocol MainViewModelling: AnyObject {
 
     func initialize()
     func loadNextPage()
-//    func showShareAlert(with data: News)
 }
 
 final class MainViewModel: MainViewModelling {
@@ -97,21 +96,3 @@ private extension MainViewModel {
         }
     }
 }
-
-//func loadRestOfPhotosToCache() {
-//    print(#function, "!!!!!!!!")
-////        guard let data else { return }
-//    view?.setScrollEnable(false)
-//    let restCells = Array(fetchedData.dropFirst(mainViewVisibleCellsCount))
-//
-//    Task.detached { [weak self] in
-//        guard let self else { print("Self is nil"); return }
-//        await preLoadImages(with: restCells)
-////            DispatchQueue.main.async {
-//            self.data?.append(contentsOf: restCells)
-////            }
-//    }
-//
-//    view?.setScrollEnable(true)
-//}
-//

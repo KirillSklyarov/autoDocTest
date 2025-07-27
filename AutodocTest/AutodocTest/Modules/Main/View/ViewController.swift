@@ -93,7 +93,7 @@ private extension MainViewController {
         ])
     }
 
-    private func setupNavigation() {
+    func setupNavigation() {
         title = "Новости"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .automatic
@@ -126,22 +126,15 @@ private extension MainViewController {
     }
 
     func showShareAlert(with data: News) {
-//        print(#function)
         let vc = AppActionSheet()
         vc.configureUI(with: data)
-//        print(vc)
         vc.modalTransitionStyle = .crossDissolve
         vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: true)
-//        router.present(vc, isParent: true, animated: false, modalPresentation: .overFullScreen)
 
         vc.onDismissButtonTapped = { [weak self] in
-            guard let self else { return }
-            guard let parent = navigationController?.visibleViewController else { print("Error: No parent"); return }
+            guard let self, let parent = navigationController?.visibleViewController else { print("Error: No parent"); return }
             parent.dismiss(animated: true)
-
-//            self?.d
-//            router.dismiss(isParent: true)
         }
     }
 
@@ -149,9 +142,7 @@ private extension MainViewController {
         viewModel.newsDataPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] news in
-                guard let self, let news else { //print(#function, "news is nil");
-                    return
-                }
+                guard let self, let news else { return }
                 print("🔑 Count: \(news.count)")
                 activityIndicator.stopAnimating()
                 newsCollectionView.apply(news: news)

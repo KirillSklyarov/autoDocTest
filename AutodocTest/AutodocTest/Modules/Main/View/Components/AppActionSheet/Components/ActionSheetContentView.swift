@@ -20,6 +20,8 @@ final class ActionSheetContentView: UIView {
 
     private let viewHeight: CGFloat = 120
 
+    var onCopyLinkTapped: (() -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,7 +72,7 @@ private extension ActionSheetContentView {
 
     func setupAction() {
         copyLinkButtonView.onCopyLinkTapped = { [weak self] in
-            print(#function)
+            self?.onCopyLinkTapped?()
         }
     }
 }
