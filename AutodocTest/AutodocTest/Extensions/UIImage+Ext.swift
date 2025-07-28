@@ -25,9 +25,17 @@ extension UIImage {
             height: size.height * scaleFactor
         )
 
-        let renderer = UIGraphicsImageRenderer(size: scaledSize)
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 2
+
+        let renderer = UIGraphicsImageRenderer(size: scaledSize, format: format)
         return renderer.image { _ in
             self.draw(in: CGRect(origin: .zero, size: scaledSize))
         }
+    }
+
+    func costEstimate() -> Int {
+        guard let cgImage = self.cgImage else { return 0 }
+        return cgImage.height * cgImage.bytesPerRow
     }
 }

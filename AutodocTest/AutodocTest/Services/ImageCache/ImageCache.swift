@@ -22,6 +22,7 @@ final class ImageCache {
 
     // MARK: - Init
     init() {
+        setupCache()
         createCacheDirectoryIfNeeded()
         clearOldFiles()
     }
@@ -67,7 +68,9 @@ final class ImageCache {
             saveImageToDisk(resizedImage, url)
         }
 
-        cache.setObject(resizedImage, forKey: url as NSURL)
+        let cost = resizedImage.costEstimate()
+        print(cost)
+        cache.setObject(resizedImage, forKey: url as NSURL, cost: cost)
         print("✅ saved to cache")
     }
 
@@ -79,11 +82,17 @@ final class ImageCache {
 
 // MARK: - Supporting methods
 private extension ImageCache {
+    func setupCache() {
+        cache.totalCostLimit = 30 * 1024 * 1024
+        cache.countLimit = 30
+    }
+
     func getResizedImage(_ image: UIImage?) -> UIImage? {
         guard let image else { print("image is nil"); return nil }
         let screenWidth = UIScreen.main.bounds.width
         let aspectRatio: CGFloat = 1000 / 1600
         let size = CGSize(width: screenWidth, height: screenWidth * aspectRatio)
+
         return image.resizedMaintainingAspectRatio(to: size)
     }
 
@@ -106,15 +115,14 @@ private extension ImageCache {
     }
 
     func saveImageToDisk(_ image: UIImage, _ url: URL) {
+        print(image.size)
         let fileURL = getPath(for: url)
-        guard let data = image.jpegData(compressionQuality: 0.8) else {
+        guard let data = image.jpegData(compressionQuality: 0.6) else {
             print("🔴 Failed to convert image to JPEG data")
             return }
         do {
-            //            print("Full file path: \(fileURL.path)")
             try data.write(to: fileURL)
             print("✅ saved to disk")
-            //            print("filename: \(fileURL.lastPathComponent)")
         } catch {
             print("🔴 image NOT saved to disk: \(error.localizedDescription)")
         }

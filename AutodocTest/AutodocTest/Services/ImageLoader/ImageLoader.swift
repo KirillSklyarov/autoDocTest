@@ -27,10 +27,9 @@ final class ImageLoader: ImageLoaderProtocol {
         guard let url = URL(string: urlString) else { completion(nil);
             print("Invalid URL"); return }
 
-//        print(#function, imageCache.isImageCached(url))
         if imageCache.isImageCached(url) {
             let image = imageCache.getImageFromCache(url)
-//            print("✅ Get image from cache")
+            print("✅ Get image from cache")
             completion(image)
             return
         }

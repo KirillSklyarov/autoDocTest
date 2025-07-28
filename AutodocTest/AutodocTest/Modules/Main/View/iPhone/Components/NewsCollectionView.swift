@@ -154,7 +154,7 @@ extension NewsCollectionView: UICollectionViewDelegate {
 
         guard contentHeight > visibleHeight else { return }
 
-        if offsetY + visibleHeight >= contentHeight * 0.7 {
+        if offsetY + visibleHeight >= contentHeight * 0.8 {
             onLoadNextPage?()
         }
 
