@@ -11,6 +11,8 @@ enum AppImageViewType {
     case newsImage
     case dotsImage
     case checkmark
+    case newsMegaphone
+    case sideBarForIpad
 }
 
 final class AppImageView: UIImageView {
@@ -28,6 +30,11 @@ final class AppImageView: UIImageView {
     func setImage(_ image: UIImage?) {
         self.image = image
     }
+
+    func changeColor(_ color: UIColor) {
+        image = image?.withRenderingMode(.alwaysTemplate)
+        tintColor = color
+    }
 }
 
 // MARK: - Setup UI
@@ -41,6 +48,12 @@ private extension AppImageView {
         case .checkmark:
             let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
             image = UIImage(systemName: "checkmark", withConfiguration: config)?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal)
+        case .newsMegaphone:
+            let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+            image = UIImage(systemName: "megaphone", withConfiguration: config)?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
+        case .sideBarForIpad:
+            let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+            image = UIImage(systemName: "sidebar.left", withConfiguration: config)?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
         }
     }
 }

@@ -7,13 +7,14 @@
 
 import UIKit
 
+protocol ModuleFactoryProtocol {
+    func makeModule(for module: MainModule) -> UIViewController
+}
 
 enum MainModule {
     case main
-}
-
-protocol ModuleFactoryProtocol {
-    func makeModule(for module: MainModule) -> UIViewController
+    case menuForIPad
+    case mainSplitForIPad
 }
 
 // Фабрика экранов модуля главного экрана
@@ -35,6 +36,8 @@ extension ModuleFactory {
     func makeModule(for module: MainModule) -> UIViewController {
         switch module {
         case .main: return makeMainModule()
+        case .menuForIPad: return makeMenuForIPadModule()
+        case .mainSplitForIPad: return makeMainSplitForIPadModule()
         }
     }
 
@@ -44,5 +47,16 @@ extension ModuleFactory {
         viewModel.view = vc
         let navVC = UINavigationController(rootViewController: vc)
         return navVC
+    }
+
+    func makeMenuForIPadModule() -> UINavigationController {
+        let vc = MenuViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        return navVC
+    }
+
+    func makeMainSplitForIPadModule() -> UISplitViewController {
+        let vc = MainSplitViewController(moduleFactory: self)
+        return vc
     }
 }

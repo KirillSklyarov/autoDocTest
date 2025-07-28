@@ -14,6 +14,8 @@ enum AppLabelType {
     case category
     case copyLink
     case toastTitle
+    case categoryTitle
+    case categorySubtitle
 }
 
 final class AppLabel: UILabel {
@@ -55,6 +57,14 @@ private extension AppLabel {
             font = .systemFont(ofSize: 14, weight: .semibold)
             textColor = .white
             backgroundColor = .clear
+            text = title
+        case .categoryTitle:
+            font = .systemFont(ofSize: 30, weight: .bold)
+            textColor = .black
+            text = title
+        case .categorySubtitle:
+            font = .systemFont(ofSize: 30, weight: .regular)
+            textColor = .black
             text = title
         }
         self.numberOfLines = numberOfLines

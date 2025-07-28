@@ -19,9 +19,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func startApp() {
-        let navVC = di.moduleFactory.makeModule(for: .main)
-        window?.rootViewController = navVC
+        let vc = getRootViewController()
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
+    }
+
+    private func getRootViewController() -> UIViewController {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return di.moduleFactory.makeModule(for: .mainSplitForIPad)
+        } else {
+            return di.moduleFactory.makeModule(for: .main)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -92,7 +92,10 @@ private extension MainViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+}
 
+// MARK: - Setup navigation
+private extension MainViewController {
     func setupNavigation() {
         title = "Новости"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -104,6 +107,28 @@ private extension MainViewController {
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+        setupToggleMenuForIPad()
+
+    }
+
+    func setupToggleMenuForIPad() {
+        guard splitViewController != nil else { return }
+        let image = AppImageView(type: .sideBarForIpad)
+        let sideBarButtonItem = UIBarButtonItem(image: image.image, style: .plain, target: self, action: #selector(toggleMenu))
+        navigationItem.leftBarButtonItem = sideBarButtonItem
+    }
+
+    @objc private func toggleMenu() {
+        if splitViewController?.displayMode == .oneBesideSecondary {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.splitViewController?.preferredDisplayMode = .secondaryOnly
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.splitViewController?.preferredDisplayMode = .oneBesideSecondary
+            }
+        }
     }
 }
 
