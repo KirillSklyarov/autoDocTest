@@ -17,21 +17,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         startApp()
     }
+}
 
-    private func startApp() {
+// MARK: - Supporting methods
+private extension SceneDelegate {
+    func startApp() {
         let vc = getRootViewController()
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
 
-    private func getRootViewController() -> UIViewController {
+    func getRootViewController() -> UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return di.moduleFactory.makeModule(for: .mainSplitForIPad)
         } else {
             return di.moduleFactory.makeModule(for: .main)
         }
     }
+}
 
+// MARK: - Other methods
+extension SceneDelegate {
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

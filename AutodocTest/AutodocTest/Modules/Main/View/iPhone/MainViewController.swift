@@ -42,6 +42,11 @@ final class MainViewController: UIViewController, MainDisplaying {
         viewModel.initialize()
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        newsCollectionView.collectionViewLayout.invalidateLayout()
+    }
+
     func setupInitialState() {
         setupUI()
         setupActions()

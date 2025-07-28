@@ -18,9 +18,7 @@ final class NewsCollectionView: UICollectionView {
     var imageLoader: ImageLoaderProtocol?
 
     var isLoadingNextPage = false {
-        didSet {
-            reloadFooter()
-        }
+        didSet { reloadFooter() }
     }
 
     var onCellSelected: ((News) -> Void)?

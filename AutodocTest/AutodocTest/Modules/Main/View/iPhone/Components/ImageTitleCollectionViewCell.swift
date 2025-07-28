@@ -20,7 +20,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     private lazy var textAndShareStackView = AppStackView([titleAndDateStackView, shareButtonView], axis: .horizontal, spacing: 10)
 
-    private lazy var stackView = AppStackView([textAndShareStackView, imageView, categoryLabel], axis: .vertical, spacing: 10, distribution: .equalSpacing)
+    private lazy var stackView = AppStackView([textAndShareStackView, imageView, categoryLabel], axis: .vertical, spacing: 10, distribution: .fill)
 
     private var imageLoader: ImageLoaderProtocol?
 
@@ -64,12 +64,18 @@ private extension NewsCollectionViewCell {
         titleAndDateStackView.isLayoutMarginsRelativeArrangement = true
         titleAndDateStackView.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 20)
 
-        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1000/1600).isActive = true
-
         titleAndDateStackView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         shareButtonView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         shareButtonView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         titleAndDateStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
+        setupImageViewLayout()
+    }
+
+    func setupImageViewLayout() {
+        let aspectRatio = imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1000/1600)
+        aspectRatio.priority = .defaultHigh
+        aspectRatio.isActive = true
     }
 
     func setupAction() {

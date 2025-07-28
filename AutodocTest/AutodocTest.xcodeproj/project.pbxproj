@@ -286,11 +286,11 @@
 		7375445E2E32211A00D302F2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				737544642E3221AB00D302F2 /* DI */,
 				73785B6A2E36C1E900148A68 /* ModuleFactory */,
 				737544812E327E3C00D302F2 /* ImageLoader */,
 				7375447B2E32427900D302F2 /* ImageCache */,
 				7375445D2E32211A00D302F2 /* NetworkLayer */,
-				737544642E3221AB00D302F2 /* DI */,
 			);
 			path = Services;
 			sourceTree = "<group>";
