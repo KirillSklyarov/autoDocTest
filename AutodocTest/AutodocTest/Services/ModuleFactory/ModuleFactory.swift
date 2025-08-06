@@ -52,7 +52,7 @@ extension ModuleFactory {
     }
 
     func makeMenuForIPadModule() -> UINavigationController {
-        let vc = MenuViewController()
+        let vc = SideBarViewController()
         let navVC = UINavigationController(rootViewController: vc)
         return navVC
     }

@@ -33,12 +33,6 @@ final class CollectionAdapter: NSObject, CollectionViewAdapting {
     private var footer: UICollectionView.SupplementaryRegistration<LoadingFooterView>!
 
     var isLoadingNextPage = false
-//    {
-//
-//        didSet {
-//            reloadFooter()
-//        }
-//    }
 
     var onImageLoaded: (() -> Void)?
     var onShareButtonTapped: ((News) -> Void)?
