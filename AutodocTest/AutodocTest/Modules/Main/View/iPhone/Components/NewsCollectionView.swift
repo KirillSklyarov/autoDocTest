@@ -14,6 +14,8 @@ private enum Section {
 final class NewsCollectionView: UICollectionView {
 
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, News>!
+    private var newsCell: UICollectionView.CellRegistration<NewsCollectionViewCell, News>!
+    private var footer: UICollectionView.SupplementaryRegistration<LoadingFooterView>!
 
     var imageLoader: ImageLoaderProtocol?
 
@@ -30,6 +32,8 @@ final class NewsCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = Self.makeLayout()
         super.init(frame: frame, collectionViewLayout: layout)
+        cellRegistration()
+        footerRegistration()
         setupUI()
     }
 
@@ -72,22 +76,9 @@ private extension NewsCollectionView {
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-    func setupUI() {
-        backgroundColor = .clear
-        indicatorStyle = .white
-
-        registerCell(NewsCollectionViewCell.self)
-        registerSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, viewClass: LoadingFooterView.self)
-
-        delegate = self
-
-        setupDataSource()
-    }
-
-    func setupDataSource() {
-        diffableDataSource = UICollectionViewDiffableDataSource<Section, News>(collectionView: self)
-        { [weak self] collectionView, indexPath, news in
-            let cell = collectionView.dequeueCell(for: indexPath) as NewsCollectionViewCell
+    func cellRegistration() {
+        newsCell =
+        UICollectionView.CellRegistration<NewsCollectionViewCell, News> { [weak self] cell, indexPath, news in
             cell.configure(with: news, imageLoader: self?.imageLoader)
 
             cell.onImageLoaded = { [weak self] in
@@ -98,25 +89,39 @@ private extension NewsCollectionView {
             cell.onShareButtonTapped = { [weak self] in
                 self?.onShareButtonTapped?(news)
             }
+        }
+    }
 
-            return cell
+    func footerRegistration() {
+        footer = UICollectionView.SupplementaryRegistration<LoadingFooterView>(elementKind: UICollectionView.elementKindSectionFooter) { [weak self] footer, _, indexPath in
+            guard let self else { return }
+            if isLoadingNextPage {
+                footer.startAnimating()
+            } else {
+                footer.stopAnimating()
+            }
+        }
+    }
+
+    func setupUI() {
+        backgroundColor = .clear
+        indicatorStyle = .white
+
+        delegate = self
+
+        setupDataSource()
+    }
+
+    func setupDataSource() {
+        diffableDataSource = UICollectionViewDiffableDataSource<Section, News>(collectionView: self)
+        { [weak self] collectionView, indexPath, news in
+            guard let self else { return UICollectionViewCell() }
+            return collectionView.dequeueConfiguredReusableCell(using: newsCell, for: indexPath, item: news)
         }
 
         diffableDataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
             guard let self else { return UICollectionReusableView() }
-            if kind == UICollectionView.elementKindSectionFooter {
-                let footer = collectionView.dequeueSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
-
-                if isLoadingNextPage {
-                    footer.startAnimating()
-                } else {
-                    footer.stopAnimating()
-                }
-
-                return footer
-            } else {
-                return UICollectionReusableView()
-            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: footer, for: indexPath)
         }
 
         setupSnapshot(data: [])
@@ -126,7 +131,6 @@ private extension NewsCollectionView {
         var snapshot = NSDiffableDataSourceSnapshot<Section, News>()
         snapshot.appendSections([.main])
         snapshot.appendItems(data, toSection: .main)
-        snapshot.reloadItems(data)
 
         DispatchQueue.main.async { [weak self] in
             self?.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)

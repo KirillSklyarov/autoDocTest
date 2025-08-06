@@ -18,7 +18,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     private lazy var titleAndDateStackView = AppStackView([titleLabel, dateLabel], axis: .vertical, spacing: 5)
 
-    private lazy var textAndShareStackView = AppStackView([titleAndDateStackView, shareButtonView], axis: .horizontal, spacing: 10)
+    private lazy var textAndShareStackView = AppStackView([titleAndDateStackView, shareButtonView], axis: .horizontal, spacing: 20)
 
     private lazy var stackView = AppStackView([textAndShareStackView, imageView, categoryLabel], axis: .vertical, spacing: 10, distribution: .fill)
 
