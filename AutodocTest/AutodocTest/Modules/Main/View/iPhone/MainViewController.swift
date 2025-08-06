@@ -8,11 +8,7 @@
 import UIKit
 import Combine
 
-protocol MainDisplaying: AnyObject {
-    func setupInitialState()
-    func showLoading(_ bool: Bool)
-    func setScrollEnable(_ enable: Bool)
-}
+protocol MainDisplaying: AnyObject { }
 
 final class MainViewController: UIViewController, MainDisplaying {
 
@@ -40,36 +36,24 @@ final class MainViewController: UIViewController, MainDisplaying {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.initialize()
+        setupInitialState()
+        viewModel.sendEvent(.viewDidLoad)
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         newsCollectionView.collectionViewLayout.invalidateLayout()
     }
+}
 
+// MARK: - Setup UI
+private extension MainViewController {
     func setupInitialState() {
         setupUI()
         setupCollectionViewAdapter()
         dataBinding()
     }
 
-    func showLoading(_ bool: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            bool ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        }
-    }
-
-    func setScrollEnable(_ enable: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            self?.newsCollectionView.isScrollEnabled = enable
-        }
-    }
-}
-
-// MARK: - Setup UI
-private extension MainViewController {
     func setupUI() {
         view.backgroundColor = .black
 
@@ -100,16 +84,16 @@ private extension MainViewController {
 
         newsCollectionAdapter?.onCellSelected = { [weak self] news in
             guard let self else { return }
-            viewModel.eventHandler(.openURL(url: news.fullUrl))
+            viewModel.sendEvent(.openURL(url: news.fullUrl))
         }
 
         newsCollectionAdapter?.onLoadNextPage = { [weak self] in
             guard let self else { return }
-            viewModel.loadNextPage()
+            viewModel.sendEvent(.loadNextPage)
         }
 
         newsCollectionAdapter?.onShareButtonTapped = { [weak self] news in
-            self?.viewModel.eventHandler(.shareButtonTapped(data: news))
+            self?.viewModel.sendEvent(.shareButtonTapped(data: news))
         }
     }
 
@@ -156,22 +140,39 @@ private extension MainViewController {
 // MARK: - Data binding
 private extension MainViewController {
     func dataBinding() {
-        viewModel.newsDataPublisher
+        viewModel.statePublisher
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] news in
-                guard let self, let news else { return }
-                print("🔑 Count: \(news.count)")
-                activityIndicator.stopAnimating()
-                newsCollectionAdapter?.apply(news: news)
-            })
-            .store(in: &cancellables)
-
-        viewModel.isLoadingNextPagePublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] isLoading in
+            .sink(receiveValue: { [weak self] state in
                 guard let self else { print(#function, "self is nil"); return }
-                newsCollectionAdapter?.isLoadingNextPage = isLoading
+                switch state {
+                case .idle: setupInitialState()
+                case .loading: showLoading(true)
+                case .success(let data):
+                    print("🔑 Count: \(data.count)")
+                    showLoading(false)
+                    newsCollectionAdapter?.isLoadingNextPage = false
+                    newsCollectionAdapter?.apply(news: data)
+                case .paginating:
+                    newsCollectionAdapter?.isLoadingNextPage = true
+                case .error(_): break
+                }
             })
             .store(in: &cancellables)
+    }
+}
+
+// MARK: - Supporting methods
+private extension MainViewController {
+    func setScrollEnable(_ enable: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.newsCollectionView.isScrollEnabled = enable
+        }
+    }
+
+    func showLoading(_ bool: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            bool ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        }
     }
 }

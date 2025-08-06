@@ -33,6 +33,12 @@ final class CollectionAdapter: NSObject, CollectionViewAdapting {
     private var footer: UICollectionView.SupplementaryRegistration<LoadingFooterView>!
 
     var isLoadingNextPage = false
+//    {
+//
+//        didSet {
+//            reloadFooter()
+//        }
+//    }
 
     var onImageLoaded: (() -> Void)?
     var onShareButtonTapped: ((News) -> Void)?
@@ -50,6 +56,12 @@ final class CollectionAdapter: NSObject, CollectionViewAdapting {
 
     func apply(news: [News]) {
         setupSnapshot(data: news)
+    }
+
+    func reloadFooter() {
+        var snapshot = dataSource.snapshot()
+        snapshot.reloadSections([.main])
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
@@ -132,6 +144,8 @@ extension CollectionAdapter: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let maxIndex = indexPaths.map { $0.item }.max() ?? 0
         let total = dataSource.snapshot().itemIdentifiers.count
-        if maxIndex >= Int(Double(total) * 0.8) { onLoadNextPage?() }
+        if maxIndex >= Int(Double(total) * 0.95) {
+            onLoadNextPage?()
+        }
     }
 }
