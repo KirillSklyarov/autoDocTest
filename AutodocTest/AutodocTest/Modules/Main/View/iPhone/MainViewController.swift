@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SafariServices
 import Combine
 
 protocol MainDisplaying: AnyObject {
@@ -18,7 +17,7 @@ protocol MainDisplaying: AnyObject {
 final class MainViewController: UIViewController, MainDisplaying {
 
     private lazy var newsCollectionView = NewsCollectionView()
-    private var newsCollectionAdapter: CollectionAdapter?
+    private var newsCollectionAdapter: CollectionViewAdapting?
 
     private lazy var activityIndicator = AppActivityIndicator()
 
@@ -41,36 +40,17 @@ final class MainViewController: UIViewController, MainDisplaying {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionViewAdapter()
         viewModel.initialize()
     }
 
-//    override func viewWillLayoutSubviews() {
-//        super.viewWillLayoutSubviews()
-//        newsCollectionView.collectionViewLayout.invalidateLayout()
-//    }
-
-    func setupCollectionViewAdapter() {
-        newsCollectionAdapter = CollectionAdapter(collectionView: newsCollectionView, imageLoader: imageLoader)
-
-        newsCollectionAdapter?.onCellSelected = { [weak self] news in
-            guard let self else { return }
-            showURL(url: news.fullUrl)
-        }
-
-        newsCollectionAdapter?.onLoadNextPage = { [weak self] in
-            guard let self else { return }
-            viewModel.loadNextPage()
-        }
-
-        newsCollectionAdapter?.onShareButtonTapped = { [weak self] news in
-            self?.showShareAlert(with: news)
-        }
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        newsCollectionView.collectionViewLayout.invalidateLayout()
     }
 
     func setupInitialState() {
         setupUI()
-//        setupActions()
+        setupCollectionViewAdapter()
         dataBinding()
     }
 
@@ -91,9 +71,9 @@ final class MainViewController: UIViewController, MainDisplaying {
 // MARK: - Setup UI
 private extension MainViewController {
     func setupUI() {
-        setupNavigation()
-
         view.backgroundColor = .black
+
+        setupNavigation()
         setupNewsCollectionView()
         setupActivityIndicator()
     }
@@ -101,7 +81,6 @@ private extension MainViewController {
     func setupNewsCollectionView() {
         view.addSubviews(newsCollectionView)
         newsCollectionView.setConstraints(isSafeArea: true, allInsets: 0)
-//        newsCollectionView.imageLoader = imageLoader
     }
 
     func setupActivityIndicator() {
@@ -115,6 +94,25 @@ private extension MainViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+
+    func setupCollectionViewAdapter() {
+        newsCollectionAdapter = CollectionAdapter(collectionView: newsCollectionView, imageLoader: imageLoader)
+
+        newsCollectionAdapter?.onCellSelected = { [weak self] news in
+            guard let self else { return }
+            viewModel.eventHandler(.openURL(url: news.fullUrl))
+        }
+
+        newsCollectionAdapter?.onLoadNextPage = { [weak self] in
+            guard let self else { return }
+            viewModel.loadNextPage()
+        }
+
+        newsCollectionAdapter?.onShareButtonTapped = { [weak self] news in
+            self?.viewModel.eventHandler(.shareButtonTapped(data: news))
+        }
+    }
+
 }
 
 // MARK: - Setup navigation
@@ -155,21 +153,8 @@ private extension MainViewController {
     }
 }
 
-// MARK: - Setup Actions & Data binding
+// MARK: - Data binding
 private extension MainViewController {
-    func showShareAlert(with data: News) {
-        let vc = AppActionSheet()
-        vc.configureUI(with: data)
-        vc.modalTransitionStyle = .crossDissolve
-        vc.modalPresentationStyle = .overFullScreen
-        present(vc, animated: true)
-
-        vc.onDismissButtonTapped = { [weak self] in
-            guard let self, let parent = navigationController?.visibleViewController else { print("Error: No parent"); return }
-            parent.dismiss(animated: true)
-        }
-    }
-
     func dataBinding() {
         viewModel.newsDataPublisher
             .receive(on: DispatchQueue.main)
@@ -188,11 +173,5 @@ private extension MainViewController {
                 newsCollectionAdapter?.isLoadingNextPage = isLoading
             })
             .store(in: &cancellables)
-    }
-
-    func showURL(url: String) {
-        guard let url = URL(string: url) else { printContent("Invalid URL: \(url)"); return }
-        let safariVC = SFSafariViewController(url: url)
-        present(safariVC, animated: true)
     }
 }

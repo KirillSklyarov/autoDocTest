@@ -14,6 +14,12 @@ protocol MainViewModelling: AnyObject {
 
     func initialize()
     func loadNextPage()
+    func eventHandler(_ event: MainEvents)
+}
+
+enum MainEvents {
+    case shareButtonTapped(data: News)
+    case openURL(url: String)
 }
 
 final class MainViewModel: MainViewModelling {
@@ -32,13 +38,15 @@ final class MainViewModel: MainViewModelling {
 
     private var networkService: NetworkServiceProtocol
     private var imageLoader: ImageLoaderProtocol
+    private let router: Router
 
     var onAllImagesLoaded: (() -> Void)?
 
     // MARK: - Init
-    init(networkService: NetworkServiceProtocol, imageLoader: ImageLoaderProtocol) {
+    init(networkService: NetworkServiceProtocol, imageLoader: ImageLoaderProtocol, router: Router) {
         self.networkService = networkService
         self.imageLoader = imageLoader
+        self.router = router
     }
 
     func initialize() {
@@ -53,6 +61,14 @@ final class MainViewModel: MainViewModelling {
         Task {
             await fetchData()
             isLoadingNextPage = false
+        }
+    }
+
+    func eventHandler(_ event: MainEvents) {
+        guard let view else { return }
+        switch event {
+        case .shareButtonTapped(data: let data): router.showShareAlert(with: data, from: view)
+        case .openURL(url: let url): router.showURL(url: url, from: view)
         }
     }
 }

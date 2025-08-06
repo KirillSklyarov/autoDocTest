@@ -17,6 +17,7 @@ final class DependencyContainer {
     let imageLoader: ImageLoaderProtocol
     let imageCache: ImageCache
     let moduleFactory: ModuleFactoryProtocol
+    let router: Router
 
     init() {
         decoder = JSONDecoder()
@@ -26,6 +27,7 @@ final class DependencyContainer {
         networkService = NetworkService(networkClient: networkClient)
         imageCache = ImageCache()
         imageLoader = ImageLoader(imageCache: imageCache, session: session)
-        moduleFactory = ModuleFactory(networkService: networkService, imageLoader: imageLoader)
+        router = Router()
+        moduleFactory = ModuleFactory(networkService: networkService, imageLoader: imageLoader, router: router)
     }
 }

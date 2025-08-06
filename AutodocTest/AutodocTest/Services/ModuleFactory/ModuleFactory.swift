@@ -23,11 +23,13 @@ final class ModuleFactory: ModuleFactoryProtocol {
     // MARK: - Properties
     private let networkService: NetworkServiceProtocol
     private let imageLoader: ImageLoaderProtocol
+    private let router: Router
 
     // MARK: - Init
-    init(networkService: NetworkServiceProtocol, imageLoader: ImageLoaderProtocol) {
+    init(networkService: NetworkServiceProtocol, imageLoader: ImageLoaderProtocol, router: Router) {
         self.networkService = networkService
         self.imageLoader = imageLoader
+        self.router = router
     }
 }
 
@@ -42,7 +44,7 @@ extension ModuleFactory {
     }
 
     func makeMainModule() -> UINavigationController {
-        let viewModel = MainViewModel(networkService: networkService, imageLoader: imageLoader)
+        let viewModel = MainViewModel(networkService: networkService, imageLoader: imageLoader, router: router)
         let vc = MainViewController(viewModel: viewModel, imageLoader: imageLoader)
         viewModel.view = vc
         let navVC = UINavigationController(rootViewController: vc)

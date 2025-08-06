@@ -7,11 +7,22 @@
 
 import UIKit
 
+protocol CollectionViewAdapting {
+    func apply(news: [News])
+
+    var isLoadingNextPage: Bool { get set }
+
+    var onImageLoaded: (() -> Void)? { get set }
+    var onShareButtonTapped: ((News) -> Void)? { get set }
+    var onCellSelected: ((News) -> Void)? { get set }
+    var onLoadNextPage: (() -> Void)? { get set }
+}
+
 private enum Section {
     case main
 }
 
-final class CollectionAdapter: NSObject {
+final class CollectionAdapter: NSObject, CollectionViewAdapting {
 
     // MARK: - Properties
     private let collectionView: UICollectionView
@@ -33,22 +44,23 @@ final class CollectionAdapter: NSObject {
         self.collectionView = collectionView
         self.imageLoader = imageLoader
         super.init()
-        cellRegistration()
-        footerRegistration()
-        setupDataSource()
-//        apply(news: [])
 
-        self.collectionView.delegate = self
+        initialSetup()
     }
 
     func apply(news: [News]) {
-        print(news)
         setupSnapshot(data: news)
     }
 }
 
-
 private extension CollectionAdapter {
+    func initialSetup() {
+        collectionViewSetup()
+        cellRegistration()
+        footerRegistration()
+        setupDataSource()
+    }
+
     func setupDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, News>(collectionView: collectionView)
         { [weak self] collectionView, indexPath, news in
@@ -101,6 +113,10 @@ private extension CollectionAdapter {
         }
     }
 
+    func collectionViewSetup() {
+        collectionView.delegate = self
+        collectionView.prefetchDataSource = self
+    }
 }
 
 // MARK: – UICollectionViewDelegate
@@ -109,20 +125,13 @@ extension CollectionAdapter: UICollectionViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         onCellSelected?(item)
     }
+}
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentHeight = scrollView.contentSize.height
-        let visibleHeight = scrollView.bounds.size.height
-        let offsetY = scrollView.contentOffset.y
-
-        guard contentHeight > visibleHeight else { return }
-
-        if offsetY + visibleHeight >= contentHeight * 0.8 {
-            onLoadNextPage?()
-        }
-
-        if offsetY + visibleHeight >= contentHeight {
-            onLoadNextPage?()
-        }
+// MARK: – UICollectionViewDataSourcePrefetching
+extension CollectionAdapter: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let maxIndex = indexPaths.map { $0.item }.max() ?? 0
+        let total = dataSource.snapshot().itemIdentifiers.count
+        if maxIndex >= Int(Double(total) * 0.8) { onLoadNextPage?() }
     }
 }
