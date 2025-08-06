@@ -18,6 +18,8 @@ protocol MainDisplaying: AnyObject {
 final class MainViewController: UIViewController, MainDisplaying {
 
     private lazy var newsCollectionView = NewsCollectionView()
+    private var newsCollectionAdapter: CollectionAdapter?
+
     private lazy var activityIndicator = AppActivityIndicator()
 
     private var cancellables: Set<AnyCancellable> = []
@@ -39,27 +41,43 @@ final class MainViewController: UIViewController, MainDisplaying {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollectionViewAdapter()
         viewModel.initialize()
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        newsCollectionView.collectionViewLayout.invalidateLayout()
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        newsCollectionView.collectionViewLayout.invalidateLayout()
+//    }
+
+    func setupCollectionViewAdapter() {
+        newsCollectionAdapter = CollectionAdapter(collectionView: newsCollectionView, imageLoader: imageLoader)
+
+        newsCollectionAdapter?.onCellSelected = { [weak self] news in
+            guard let self else { return }
+            showURL(url: news.fullUrl)
+        }
+
+        newsCollectionAdapter?.onLoadNextPage = { [weak self] in
+            guard let self else { return }
+            viewModel.loadNextPage()
+        }
+
+        newsCollectionAdapter?.onShareButtonTapped = { [weak self] news in
+            self?.showShareAlert(with: news)
+        }
     }
 
     func setupInitialState() {
         setupUI()
-        setupActions()
+//        setupActions()
         dataBinding()
     }
 
     func showLoading(_ bool: Bool) {
         DispatchQueue.main.async { [weak self] in
-            if bool {
-                self?.activityIndicator.startAnimating()
-            } else {
-                self?.activityIndicator.stopAnimating()
-            }
+            guard let self else { return }
+            bool ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         }
     }
 
@@ -83,7 +101,7 @@ private extension MainViewController {
     func setupNewsCollectionView() {
         view.addSubviews(newsCollectionView)
         newsCollectionView.setConstraints(isSafeArea: true, allInsets: 0)
-        newsCollectionView.imageLoader = imageLoader
+//        newsCollectionView.imageLoader = imageLoader
     }
 
     func setupActivityIndicator() {
@@ -139,22 +157,6 @@ private extension MainViewController {
 
 // MARK: - Setup Actions & Data binding
 private extension MainViewController {
-    func setupActions() {
-        newsCollectionView.onCellSelected = { [weak self] news in
-            guard let self else { return }
-            showURL(url: news.fullUrl)
-        }
-
-        newsCollectionView.onLoadNextPage = { [weak self] in
-            guard let self else { return }
-            viewModel.loadNextPage()
-        }
-
-        newsCollectionView.onShareButtonTapped = { [weak self] news in
-            self?.showShareAlert(with: news)
-        }
-    }
-
     func showShareAlert(with data: News) {
         let vc = AppActionSheet()
         vc.configureUI(with: data)
@@ -175,7 +177,7 @@ private extension MainViewController {
                 guard let self, let news else { return }
                 print("🔑 Count: \(news.count)")
                 activityIndicator.stopAnimating()
-                newsCollectionView.apply(news: news)
+                newsCollectionAdapter?.apply(news: news)
             })
             .store(in: &cancellables)
 
@@ -183,7 +185,7 @@ private extension MainViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] isLoading in
                 guard let self else { print(#function, "self is nil"); return }
-                newsCollectionView.isLoadingNextPage = isLoading
+                newsCollectionAdapter?.isLoadingNextPage = isLoading
             })
             .store(in: &cancellables)
     }
