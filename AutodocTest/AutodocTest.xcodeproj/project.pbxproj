@@ -47,6 +47,7 @@
 		737544842E3294EF00D302F2 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544832E3294EF00D302F2 /* UIImage+Ext.swift */; };
 		737544882E355DF700D302F2 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737544872E355DF700D302F2 /* AppHelper.swift */; };
 		73785B6B2E36C1E900148A68 /* ModuleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73785B692E36C1E900148A68 /* ModuleFactory.swift */; };
+		73BC70F22E4394D40043783E /* CollectionLayoutProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BC70F12E4394D40043783E /* CollectionLayoutProvider.swift */; };
 		73E2F9C12E366BFB00B184FE /* AppButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C02E366BFB00B184FE /* AppButtonType.swift */; };
 		73E2F9C52E3673C600B184FE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E2F9C42E3673C600B184FE /* AppConstants.swift */; };
 /* End PBXBuildFile section */
@@ -94,6 +95,7 @@
 		737544872E355DF700D302F2 /* AppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
 		73785B692E36C1E900148A68 /* ModuleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleFactory.swift; sourceTree = "<group>"; };
 		73B8154D2E311028004FF9A5 /* AutodocTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutodocTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		73BC70F12E4394D40043783E /* CollectionLayoutProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionLayoutProvider.swift; sourceTree = "<group>"; };
 		73E2F9C02E366BFB00B184FE /* AppButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButtonType.swift; sourceTree = "<group>"; };
 		73E2F9C42E3673C600B184FE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 				731D233C2E376E0400056FBE /* Model */,
 				731D232B2E376E0400056FBE /* View */,
 				731D23392E376E0400056FBE /* ViewModel */,
+				73BC70F02E4394B30043783E /* Services */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -343,6 +346,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		73BC70F02E4394B30043783E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				73BC70F12E4394D40043783E /* CollectionLayoutProvider.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -439,6 +450,7 @@
 				731D23332E376E0400056FBE /* AppActionSheetDismissView.swift in Sources */,
 				731D23342E376E0400056FBE /* AppActionSheet.swift in Sources */,
 				731D23462E37706B00056FBE /* UITableView+TableViewCell.swift in Sources */,
+				73BC70F22E4394D40043783E /* CollectionLayoutProvider.swift in Sources */,
 				731D23352E376E0400056FBE /* LoadingFooterView.swift in Sources */,
 				731D233D2E376E0400056FBE /* News.swift in Sources */,
 				731D23362E376E0400056FBE /* ImageTitleCollectionViewCell.swift in Sources */,

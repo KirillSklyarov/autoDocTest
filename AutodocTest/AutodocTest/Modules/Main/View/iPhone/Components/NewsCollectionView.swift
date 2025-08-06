@@ -19,9 +19,7 @@ final class NewsCollectionView: UICollectionView {
 
     var imageLoader: ImageLoaderProtocol?
 
-    var isLoadingNextPage = false {
-        didSet { reloadFooter() }
-    }
+    var isLoadingNextPage = false
 
     var onCellSelected: ((News) -> Void)?
     var onLoadNextPage: (() -> Void)?
@@ -30,7 +28,7 @@ final class NewsCollectionView: UICollectionView {
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        let layout = Self.makeLayout()
+        let layout = CollectionLayoutProvider.makeLayout()
         super.init(frame: frame, collectionViewLayout: layout)
         cellRegistration()
         footerRegistration()
@@ -43,37 +41,6 @@ final class NewsCollectionView: UICollectionView {
 
     func apply(news: [News]) {
         setupSnapshot(data: news)
-    }
-}
-
-private extension NewsCollectionView {
-    static func makeLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(330)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(330)
-        )
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
-        group.interItemSpacing = .fixed(8)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 8
-
-        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
-
-        let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-
-        section.boundarySupplementaryItems = [footer]
-
-        return UICollectionViewCompositionalLayout(section: section)
     }
 
     func cellRegistration() {
@@ -135,12 +102,6 @@ private extension NewsCollectionView {
         DispatchQueue.main.async { [weak self] in
             self?.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
         }
-    }
-
-    func reloadFooter() {
-        var snapshot = diffableDataSource.snapshot()
-        snapshot.reloadSections([.main])
-        diffableDataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
