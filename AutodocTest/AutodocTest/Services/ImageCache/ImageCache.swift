@@ -29,25 +29,28 @@ final class ImageCache {
 
     // MARK: - Public methods
     func isImageCached(_ url: URL) -> Bool {
+//        print(#function)
+
         if cache.object(forKey: url as NSURL) != nil {
             return true
         } else {
-            print("Image not found in cache")
+//            print("Image not found in cache")
         }
 
         let isExistOnDisk = fileManager.fileExists(atPath: getPath(for: url).path)
 
         if isExistOnDisk {
-            print("Image found on disk")
+//            print("Image found on disk")
             saveImageFromDiskToCache(url)
         } else {
-            print("Image not found on disk")
+//            print("Image not found on disk")
         }
 
         return isExistOnDisk
     }
 
     func getImageFromCache(_ url: URL) -> UIImage? {
+//        print(#function)
         if let image = cache.object(forKey: url as NSURL) {
             return image
         }
@@ -69,14 +72,21 @@ final class ImageCache {
         }
 
         let cost = resizedImage.costEstimate()
-        print(cost)
+//        print(cost)
         cache.setObject(resizedImage, forKey: url as NSURL, cost: cost)
-        print("✅ saved to cache")
+//        print("✅ saved to cache")
     }
 
     func clearCache() {
+        print("✅ cache cleared")
         cache.removeAllObjects()
         try? fileManager.removeItem(at: cacheDirectoryURL)
+    }
+
+    func clearCacheWithoutDirectory() {
+        print("✅ cache cleared")
+        cache.removeAllObjects()
+        clearCacheDirectory()
     }
 }
 
@@ -97,6 +107,7 @@ private extension ImageCache {
     }
 
     func saveImageFromDiskToCache(_ url: URL) {
+//        print(#function)
         let image = getImageFromDisk(url)
         saveImageToCache(image, url, isExistOnDisk: true)
     }
@@ -115,14 +126,14 @@ private extension ImageCache {
     }
 
     func saveImageToDisk(_ image: UIImage, _ url: URL) {
-        print(image.size)
+//        print(image.size)
         let fileURL = getPath(for: url)
         guard let data = image.jpegData(compressionQuality: 0.6) else {
             print("🔴 Failed to convert image to JPEG data")
             return }
         do {
             try data.write(to: fileURL)
-            print("✅ saved to disk")
+//            print("✅ saved to disk")
         } catch {
             print("🔴 image NOT saved to disk: \(error.localizedDescription)")
         }
@@ -131,7 +142,7 @@ private extension ImageCache {
     func getImageFromDisk(_ url: URL) -> UIImage? {
         let fileURL = getPath(for: url)
         guard let data = try? Data(contentsOf: fileURL) else { print("🔴 Image NOT loaded from disk"); return nil }
-        print("✅ Image loaded from disk")
+//        print("✅ Image loaded from disk")
         return UIImage(data: data)
     }
 
@@ -154,6 +165,15 @@ private extension ImageCache {
             }
         } catch {
             print("🔴 Failed to clear old cached files: \(error.localizedDescription)")
+        }
+    }
+
+    func clearCacheDirectory() {
+        do {
+            let fileUrls = try fileManager.contentsOfDirectory(at: cacheDirectoryURL, includingPropertiesForKeys: nil, options: [])
+            try fileUrls.forEach { try fileManager.removeItem(at: $0) }
+        } catch {
+            print("🔴 Failed to clear cache without removing directory: \(error.localizedDescription)")
         }
     }
 }

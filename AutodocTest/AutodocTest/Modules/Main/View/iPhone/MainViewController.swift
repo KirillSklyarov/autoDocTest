@@ -148,7 +148,7 @@ private extension MainViewController {
                 case .idle: setupInitialState()
                 case .loading: showLoading(true)
                 case .success(let data):
-                    print("🔑 Count: \(data.count)")
+//                    print("🔑 Count: \(data.count)")
                     showLoading(false)
                     newsCollectionAdapter?.isLoadingNextPage = false
                     newsCollectionAdapter?.apply(news: data)

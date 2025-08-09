@@ -25,7 +25,7 @@ enum MainState {
     case loading
     case paginating
     case success(data: [News])
-    case error(Error)
+    case error(NetworkError)
 
     var isPaginating: Bool {
         switch self {
@@ -44,6 +44,7 @@ final class MainViewModel: MainViewModelling {
     private var data: [News]?
     private var pageNumber = 1
     private let newsPerPage = 5
+    private var retryCount = 3
 
     weak var view: MainDisplaying?
 
@@ -77,19 +78,25 @@ private extension MainViewModel {
     }
 
     func fetchData() async {
+//        print("Fetching data...")
         do {
             try await loadFirstVisiblePhotosToCache()
-            guard let data else  { return }
+            guard let data else { return }
             state = .success(data: data)
         } catch let error as NetworkError {
             print(error.userMessage)
+            state = .error(error)
+            await retryFetchData()
         } catch {
             print("Неизвестная ошибка \(error.localizedDescription)")
         }
     }
 
     func loadNextPage() {
-        guard !state.isPaginating else { return }
+//        print("Loading next page")
+        guard !state.isPaginating else { print("isPaginating now"); return }
+        print(pageNumber)
+
         state = .paginating
         pageNumber += 1
         Task { await fetchData() }
@@ -98,20 +105,42 @@ private extension MainViewModel {
     func loadFirstVisiblePhotosToCache() async throws {
         let fetchedData = try await networkService.fetchDataFromServer(pageNumber: pageNumber, newsPerPage: newsPerPage)
         await loadImagesToCache(with: fetchedData)
-        if data == nil || data!.isEmpty {
-            data = fetchedData
-        } else {
-            data?.append(contentsOf: fetchedData)
-        }
+        updateData(with: fetchedData)
     }
 
     func loadImagesToCache(with data: [News]) async {
         await withTaskGroup(of: Void.self) { group in
             data.forEach { news in
                 group.addTask { [weak self] in
-                    self?.imageLoader.downloadImageAndSaveToCache(from: news.titleImageUrl)
+                    try? await self?.imageLoader.downloadImageAndSaveToCache(from: news.titleImageUrl)
                 }
             }
         }
+    }
+}
+
+// MARK: - Supporting methods
+private extension MainViewModel {
+    func updateData(with fetchedData: [News]) {
+        if data == nil || data!.isEmpty {
+            data = fetchedData
+        } else {
+            let dataId = data!.map { $0.id }
+            let uniqueData = fetchedData.filter { !dataId.contains($0.id) }
+            data?.append(contentsOf: uniqueData)
+        }
+    }
+
+    func retryFetchData() async {
+        retryCount -= 1
+        guard retryCount > 0 else {
+            print("Retry count is exhausted")
+            loadNextPage()
+            retryCount = 3
+            return
+        }
+        try? await Task.sleep(nanoseconds: 1_500_000_000)
+        print("Retrying fetch data...")
+        await fetchData()
     }
 }

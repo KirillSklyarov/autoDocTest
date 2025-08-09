@@ -24,7 +24,6 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     private var imageLoader: ImageLoaderProtocol?
 
-    var onImageLoaded: (() -> Void)?
     var onShareButtonTapped: (() -> Void)?
 
     // MARK: - Init
@@ -45,9 +44,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 
     func configure(with news: News, imageLoader: ImageLoaderProtocol?) {
         guard let imageLoader else { return }
-        imageView.setImage(from: news.titleImageUrl, with: imageLoader) { [weak self] in
-            self?.onImageLoaded?()
-        }
+        imageView.image = imageLoader.getImageFromCache(news.titleImageUrl)
         titleLabel.text = news.title
         dateLabel.text = news.publishedDate
         categoryLabel.setText(news.categoryType)

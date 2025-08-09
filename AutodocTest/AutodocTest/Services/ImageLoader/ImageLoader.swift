@@ -9,7 +9,7 @@ import UIKit
 
 protocol ImageLoaderProtocol {
     func getImageFromCache(_ url: String) -> UIImage?
-    func downloadImageAndSaveToCache(from url: String)
+    func downloadImageAndSaveToCache(from url: String) async throws
 }
 
 final class ImageLoader: ImageLoaderProtocol {
@@ -27,15 +27,13 @@ final class ImageLoader: ImageLoaderProtocol {
         return imageCache.getImageFromCache(url)
     }
 
-    func downloadImageAndSaveToCache(from url: String) {
+    func downloadImageAndSaveToCache(from url: String) async throws {
         var data: (image: UIImage, url: URL)?
-        Task {
-            do {
-                data = try await downloadImage(from: url)
-                saveToCache(with: data)
-            } catch {
-                throw NetworkError.unknown(error)
-            }
+        do {
+            data = try await downloadImage(from: url)
+            saveToCache(with: data)
+        } catch {
+            throw NetworkError.unknown(error)
         }
     }
 }

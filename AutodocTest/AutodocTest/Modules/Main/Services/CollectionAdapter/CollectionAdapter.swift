@@ -12,7 +12,6 @@ protocol CollectionViewAdapting {
 
     var isLoadingNextPage: Bool { get set }
 
-    var onImageLoaded: (() -> Void)? { get set }
     var onShareButtonTapped: ((News) -> Void)? { get set }
     var onCellSelected: ((News) -> Void)? { get set }
     var onLoadNextPage: (() -> Void)? { get set }
@@ -34,7 +33,6 @@ final class CollectionAdapter: NSObject, CollectionViewAdapting {
 
     var isLoadingNextPage = false
 
-    var onImageLoaded: (() -> Void)?
     var onShareButtonTapped: ((News) -> Void)?
     var onCellSelected: ((News) -> Void)?
     var onLoadNextPage: (() -> Void)?
@@ -97,11 +95,6 @@ private extension CollectionAdapter {
         UICollectionView.CellRegistration<NewsCollectionViewCell, News> { [weak self] cell, indexPath, news in
             cell.configure(with: news, imageLoader: self?.imageLoader)
 
-            cell.onImageLoaded = { [weak self] in
-                guard let self else { return }
-                onImageLoaded?()
-            }
-
             cell.onShareButtonTapped = { [weak self] in
                 self?.onShareButtonTapped?(news)
             }
@@ -138,7 +131,7 @@ extension CollectionAdapter: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let maxIndex = indexPaths.map { $0.item }.max() ?? 0
         let total = dataSource.snapshot().itemIdentifiers.count
-        if maxIndex >= Int(Double(total) * 0.95) {
+        if maxIndex >= Int(Double(total) * 0.85) {
             onLoadNextPage?()
         }
     }
