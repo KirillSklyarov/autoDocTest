@@ -103,7 +103,7 @@ private extension CollectionAdapter {
 
     func footerRegistration() {
         footer = UICollectionView.SupplementaryRegistration<LoadingFooterView>(elementKind: UICollectionView.elementKindSectionFooter) { [weak self] footer, _, indexPath in
-            guard let self else { return }
+            guard let self else { Log.app.errorAlways("self is nil"); return }
             if isLoadingNextPage {
                 footer.startAnimating()
             } else {

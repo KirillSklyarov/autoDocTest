@@ -57,8 +57,11 @@ final class ImageCache {
             guard let tempImage = getImageFromDisk(url) else { return }
             resizedImage = tempImage
         } else {
-            guard let tempImage = getResizedImage(image) else { return }
-            resizedImage = tempImage
+            guard let image else {
+                Log.cache.errorAlways("Image is nil")
+                return
+            }
+            resizedImage = image
             saveImageToDisk(resizedImage, url)
         }
 
@@ -79,19 +82,6 @@ private extension ImageCache {
     func setupCache() {
         cache.totalCostLimit = 30 * 1024 * 1024
         cache.countLimit = 30
-    }
-
-    func getResizedImage(_ image: UIImage?) -> UIImage? {
-        guard let image else {
-            Log.cache.errorAlways("Image is nil")
-            return nil
-
-        }
-        let screenWidth = UIScreen.main.bounds.width
-        let aspectRatio: CGFloat = 1000 / 1600
-        let size = CGSize(width: screenWidth, height: screenWidth * aspectRatio)
-
-        return image.resizedMaintainingAspectRatio(to: size)
     }
 
     func saveImageFromDiskToCache(_ url: URL) {

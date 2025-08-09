@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 // MARK: - Supporting methods
 private extension SceneDelegate {
     func startApp() {
+        di.imageCache.clearCache()
+
         let vc = getRootViewController()
         window?.rootViewController = vc
         window?.makeKeyAndVisible()

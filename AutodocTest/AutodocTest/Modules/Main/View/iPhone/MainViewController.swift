@@ -162,12 +162,6 @@ private extension MainViewController {
 
 // MARK: - Supporting methods
 private extension MainViewController {
-    func setScrollEnable(_ enable: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            self?.newsCollectionView.isScrollEnabled = enable
-        }
-    }
-
     func showLoading(_ bool: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
