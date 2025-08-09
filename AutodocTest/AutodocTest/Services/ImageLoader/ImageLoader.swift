@@ -8,10 +8,9 @@
 import UIKit
 
 protocol ImageLoaderProtocol {
-    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void)
-    func loadImageToCache(from urlString: String) async throws
+    func getImageFromCache(_ url: String) -> UIImage?
+    func downloadImageAndSaveToCache(from url: String)
 }
-
 
 final class ImageLoader: ImageLoaderProtocol {
 
@@ -23,45 +22,46 @@ final class ImageLoader: ImageLoaderProtocol {
         self.session = session
     }
 
-    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-        guard let url = URL(string: urlString) else { completion(nil);
-            print("Invalid URL"); return }
-
-        if imageCache.isImageCached(url) {
-            let image = imageCache.getImageFromCache(url)
-            print("✅ Get image from cache")
-            completion(image)
-            return
-        }
-
-        session.dataTask(with: url) { [weak self] data, _, error in
-            guard let self, let data, error == nil, let image = UIImage(data: data)
-            else { return }
-
-            print("🔴 Downloading image and saving to cache")
-            imageCache.saveImageToCache(image, url)
-
-            DispatchQueue.main.async {
-                completion(image)
-            }
-        }.resume()
+    func getImageFromCache(_ url: String) -> UIImage? {
+        guard let url = URL(string: url) else { print("Invalid URL"); return nil }
+        return imageCache.getImageFromCache(url)
     }
 
-    func loadImageToCache(from urlString: String) async throws {
+    func downloadImageAndSaveToCache(from url: String) {
+        var data: (image: UIImage, url: URL)?
+        Task {
+            do {
+                data = try await downloadImage(from: url)
+                saveToCache(with: data)
+            } catch {
+                throw NetworkError.unknown(error)
+            }
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension ImageLoader {
+     func downloadImage(from urlString: String) async throws -> (UIImage, URL)? {
 
         guard let url = URL(string: urlString) else { print("Invalid URL"); throw NetworkError.invalidURL }
 
         if imageCache.isImageCached(url) {
             print("Already cached or found on disk");
-            return
+            return nil
         } else {
             print("Downloading image and saving to cache")
         }
 
         let (data, _) = try await session.data(from: url)
 
-        guard let image = UIImage(data: data) else { print("Failed to create image from data"); return }
+        guard let image = UIImage(data: data) else { print("Failed to create image from data"); return nil }
 
-        imageCache.saveImageToCache(image, url)
+        return (image, url)
+    }
+
+    func saveToCache(with data: (image: UIImage, url: URL)?) {
+        guard let data else { return }
+        imageCache.saveImageToCache(data.image, data.url)
     }
 }

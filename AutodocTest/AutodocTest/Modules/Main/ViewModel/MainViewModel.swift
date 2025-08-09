@@ -108,8 +108,8 @@ private extension MainViewModel {
     func loadImagesToCache(with data: [News]) async {
         await withTaskGroup(of: Void.self) { group in
             data.forEach { news in
-                group.addTask {
-                    try? await self.imageLoader.loadImageToCache(from: news.titleImageUrl)
+                group.addTask { [weak self] in
+                    self?.imageLoader.downloadImageAndSaveToCache(from: news.titleImageUrl)
                 }
             }
         }

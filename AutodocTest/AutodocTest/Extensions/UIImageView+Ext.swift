@@ -8,12 +8,7 @@
 import UIKit
 
 extension UIImageView {
-    func setImage(from urlString: String, with loader: ImageLoaderProtocol, placeholder: UIImage? = nil, completion: (() -> Void)? = nil) {
-        self.image = placeholder
-
-        loader.loadImage(from: urlString) { [weak self] image in
-            self?.image = image
-            completion?()
-        }
+    func setImage(from urlString: String, with loader: ImageLoaderProtocol, completion: (() -> Void)? = nil) {
+        self.image = loader.getImageFromCache(urlString)
     }
 }
