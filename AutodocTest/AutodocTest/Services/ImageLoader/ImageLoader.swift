@@ -23,7 +23,7 @@ final class ImageLoader: ImageLoaderProtocol {
     }
 
     func getImageFromCache(_ url: String) -> UIImage? {
-        guard let url = URL(string: url) else { print("Invalid URL"); return nil }
+        guard let url = URL(string: url) else { Log.imageLoader.errorAlways("Invalid URL"); return nil }
         return imageCache.getImageFromCache(url)
     }
 
@@ -42,18 +42,22 @@ final class ImageLoader: ImageLoaderProtocol {
 private extension ImageLoader {
      func downloadImage(from urlString: String) async throws -> (UIImage, URL)? {
 
-        guard let url = URL(string: urlString) else { print("Invalid URL"); throw NetworkError.invalidURL }
+         guard let url = URL(string: urlString) else { Log.imageLoader.errorAlways("Invalid URL")
+             throw NetworkError.invalidURL
+         }
 
         if imageCache.isImageCached(url) {
-            print("Already cached or found on disk");
+            Log.imageLoader.debugOnly("Already cached or found on disk")
             return nil
         } else {
-            print("Downloading image and saving to cache")
+            Log.imageLoader.debugOnly("Downloading image and saving to cache")
         }
 
         let (data, _) = try await session.data(from: url)
 
-        guard let image = UIImage(data: data) else { print("Failed to create image from data"); return nil }
+         guard let image = UIImage(data: data) else { Log.imageLoader.errorAlways("Failed to create image from data")
+             return nil
+         }
 
         return (image, url)
     }

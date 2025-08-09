@@ -78,24 +78,24 @@ private extension MainViewModel {
     }
 
     func fetchData() async {
-//        print("Fetching data...")
         do {
             try await loadFirstVisiblePhotosToCache()
             guard let data else { return }
             state = .success(data: data)
         } catch let error as NetworkError {
-            print(error.userMessage)
+            Log.app.errorAlways(error.userMessage)
             state = .error(error)
             await retryFetchData()
         } catch {
-            print("Неизвестная ошибка \(error.localizedDescription)")
+            Log.app.errorAlways("Неизвестная ошибка \(error.localizedDescription)")
         }
     }
 
     func loadNextPage() {
-//        print("Loading next page")
-        guard !state.isPaginating else { print("isPaginating now"); return }
-        print(pageNumber)
+        guard !state.isPaginating else {
+            Log.cache.debugOnly("isPaginating now")
+            return
+        }
 
         state = .paginating
         pageNumber += 1
@@ -134,13 +134,13 @@ private extension MainViewModel {
     func retryFetchData() async {
         retryCount -= 1
         guard retryCount > 0 else {
-            print("Retry count is exhausted")
+            Log.app.debugOnly("Retry count is exhausted")
             loadNextPage()
             retryCount = 3
             return
         }
         try? await Task.sleep(nanoseconds: 1_500_000_000)
-        print("Retrying fetch data...")
+        Log.app.debugOnly("Retrying fetch data...")
         await fetchData()
     }
 }

@@ -11,7 +11,8 @@ import SafariServices
 final class Router {
     func showShareAlert(with data: News, from vc: MainDisplaying) {
         guard let vc = vc as? UIViewController else {
-            print("Error: vc is not UIViewController"); return
+            Log.router.errorAlways("Error: vc is not UIViewController")
+            return
         }
         let sheet = AppActionSheet()
         sheet.configureUI(with: data)
@@ -26,9 +27,13 @@ final class Router {
 
     func showURL(url: String, from vc: MainDisplaying) {
         guard let vc = vc as? UIViewController else {
-            print("Error: vc is not UIViewController"); return
+            Log.router.errorAlways("Error: vc is not UIViewController")
+            return
         }
-        guard let url = URL(string: url) else { print("Invalid URL: \(url)"); return }
+        guard let url = URL(string: url) else {
+            Log.router.errorAlways("Invalid URL: \(url)")
+            return
+        }
         let safariVC = SFSafariViewController(url: url)
         vc.present(safariVC, animated: true)
     }

@@ -143,12 +143,11 @@ private extension MainViewController {
         viewModel.statePublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
-                guard let self else { print(#function, "self is nil"); return }
+                guard let self else { Log.app.errorAlways("self is nil"); return }
                 switch state {
                 case .idle: setupInitialState()
                 case .loading: showLoading(true)
                 case .success(let data):
-//                    print("🔑 Count: \(data.count)")
                     showLoading(false)
                     newsCollectionAdapter?.isLoadingNextPage = false
                     newsCollectionAdapter?.apply(news: data)
